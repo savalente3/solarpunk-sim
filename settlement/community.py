@@ -1,20 +1,20 @@
 """The community: the buildings and the store, on one plane.
 
 The buildings grow and consume, the store moves produce between them. This is
-what holds them together, and what runs the days.
+what holds them together, and what runs the weeks.
 """
 from settlement.weather import Weather
 
 
 class Community:
-    # - how far tenant needs swing either way in a day
+    # - how far tenant needs swing either way in a week
     variation = 0.25
 
     def __init__(self, buildings, store):
         self.buildings = buildings
         self.store = store
 
-    def run_day(self, day, rng):
+    def run_week(self, week, rng):
         # - each building gets its own weather and its own rate
         skies = {}
         tanks = {}
@@ -36,7 +36,7 @@ class Community:
         # - building trades produce for variety
 
         return {
-            "day": day,
+            "week": week,
             "weather": skies,
             "tenants": wanted,
             "buildings": tanks,

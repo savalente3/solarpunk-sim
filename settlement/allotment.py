@@ -13,13 +13,13 @@ class Allotment:
     bed_area = 10           # square metres
 
     # - what the beds want
-    irrigation_rate = 9     # litres per square metre on a dry day
-    energy_rate = 10        # kWh a day to run the allotment
+    irrigation_rate = 63    # litres per square metre on a dry week
+    energy_rate = 70        # kWh a week to run the allotment
     seedling_thirst = 0.2   # share a bare bed drinks against a ripe one
 
     # - the cycle
-    growth_days = 3         # days from seed to ripe
-    shelf_days = 2          # days a ripe bed stands before it dies
+    growth_weeks = 3        # weeks from seed to ripe
+    shelf_weeks = 2         # weeks a ripe bed stands before it dies
     crop_yield = 1          # kg per square metre
 
     def __init__(self, area):
@@ -57,12 +57,12 @@ class Allotment:
                 continue
 
             if bed["maturity"] < 1.0:
-                bed["maturity"] = min(1.0, bed["maturity"] + share / self.growth_days)
+                bed["maturity"] = min(1.0, bed["maturity"] + share / self.growth_weeks)
 
             else:
                 bed["standing"] += 1
 
-                if bed["standing"] > self.shelf_days:
+                if bed["standing"] > self.shelf_weeks:
                     died.append(bed["crop"])
                     self.beds[index] = None
 

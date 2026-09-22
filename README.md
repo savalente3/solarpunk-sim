@@ -33,7 +33,7 @@ python main.py
 
 ```
 agents/       building and shop agents, model config
-settlement/   the model: weather, building, day
+settlement/   the model: weather, building, week
 main.py       entry point
 ```
 
@@ -46,12 +46,12 @@ The rates are real UK figures:
 | ------------------- | --------------------------------- | ------ |
 | rainfall            | 715.6 mm/yr, Nottingham 1991-2020 | [Met Office, Watnall](https://www.metoffice.gov.uk/research/climate/maps-and-data/location-specific-long-term-averages/gcrje93b8) |
 | rooftop PV yield    | 950 kWh/kWp/yr, approx 0.52 kWh/m2/day | [MCS MIS 3002](https://payaca.com/uk/solar-yield-calculator) |
-| vegetable irrigation| 30-50 L/m2/week, approx 5 L/m2/day dry | [RHS](https://rhs170.rhs.org.uk/vegetables/watering) |
+| vegetable irrigation| 30-50 L/m2/week, 63 L/m2/week dry in code | [RHS](https://rhs170.rhs.org.uk/vegetables/watering) |
 | allotment yield     | 1 kg/m2/season                    | [Univ. of Sussex, Brighton allotments](https://www.britishecologicalsociety.org/city-allotments-match-farming-productivity-per-square-metre/) |
 
 `panel_yield` and `rain_yield` in `settlement/building.py` are the rates on
-the brightest and wettest day, so an average day (intensity 0.5) gives the
-real-world average: 31 kWh and 392 litres.
+the brightest and wettest week, so an average week (intensity 0.5) gives the
+real-world average: 218 kWh and 2,749 litres.
 
 ## Models
 
@@ -73,7 +73,7 @@ in case the capacity situation changes.
 
 ## Status
 
-- [x] `Weather` — one day's sun and rain intensity, seeded
+- [x] `Weather` — one week's sun and rain intensity, seeded
 - [x] `Building` — collects energy and water from the weather
 - [x] agents constructed from model config, and answering
 - [ ] residents and plots — something for the stores to be spent on
@@ -81,7 +81,7 @@ in case the capacity situation changes.
 - [ ] managers agree the energy/water split
 - [ ] allotment plants / waters / harvests
 - [ ] residents consume, surplus to shop
-- [ ] `Season` — loop days, write JSONL
+- [ ] `Season` — loop weeks, write JSONL
 - [ ] metrics, conditions, statistics and figures
 
 Known: NVIDIA's free tier is shared capacity and drops requests under load,

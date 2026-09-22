@@ -13,16 +13,16 @@ class Building:
     roof_area = 200
     panel_area = 60
 
-    # - yield at intensity 1.0
-    panel_yield = 1.04      # kWh per square metre of panel
-    rain_yield = 11.9       # litres per square metre of roof
+    # - yield in a week at intensity 1.0
+    panel_yield = 7.28      # kWh per square metre of panel
+    rain_yield = 83.3       # litres per square metre of roof
 
     # - storage limits
     battery = 120           # kWh
     tank = 3000             # litres
 
-    # - what the tenants want in a day
-    tenant_needs = {"energy": 30, "water": 200, "food": 3}
+    # - what the tenants want in a week
+    tenant_needs = {"energy": 210, "water": 1400, "food": 21}
 
     def __init__(self, name, model_config):
         self.name = name
@@ -35,7 +35,7 @@ class Building:
         self.managers = BuildingManagers(name, model_config)
 
     def needs(self, rate):
-        # - rate comes from the day, same for every building
+        # - rate comes from the week, same for every building
         
         wanted = {}
         for name, amount in self.tenant_needs.items():

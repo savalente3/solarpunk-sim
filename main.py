@@ -1,4 +1,4 @@
-"""Run some days and print them."""
+"""Run some weeks and print them."""
 import random
 
 from agents.config.model_config import load_models
@@ -15,7 +15,7 @@ def pairs(values):
 
 
 def describe(record):
-    lines = [f"Day: {record['day']}"]
+    lines = [f"Week: {record['week']}"]
     for name, tanks in record["buildings"].items():
         lines.append("  " + f"Building {name}:".ljust(13) + pairs(tanks))
         lines.append("    " + "weather:".ljust(11) + pairs(record["weather"][name]))
@@ -32,8 +32,8 @@ if __name__ == "__main__":
     store = Store(models["gpt_oss"])
     community = Community(buildings, store)
 
-    for day in range(1):
-        print(describe(community.run_day(day, rng)))
+    for week in range(1):
+        print(describe(community.run_week(week, rng)))
         print()
 
     question = "Say in one sentence who you are."
