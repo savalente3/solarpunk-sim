@@ -1,0 +1,17 @@
+# conda env create -f environment.yml
+# conda activate solarpunk-sim
+name: solarpunk-sim
+channels:
+  - conda-forge
+dependencies:
+  # 3.11 for tomllib in the standard library
+  - python=3.11
+  - numpy>=1.26
+  - pandas>=2.0
+  - scipy>=1.11
+  - matplotlib>=3.8
+  - pip
+  - pip:
+      - langchain>=1.0
+      - langchain-openai>=1.0
+      - python-dotenv>=1.0
