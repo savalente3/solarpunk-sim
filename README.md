@@ -2,14 +2,16 @@
 
 COMP4105 Designing Intelligent Agents — reassessment project.
 
-Two identical buildings each harvest solar energy and rainwater, and must
-spend both on their residents and on their rooftop allotment. Each building
-runs two agents on the same model: a building manager and an allotment
-manager. Surplus produce goes to a shop agent that redistributes stock and
-is responsible for keeping produce diverse.
+A settlement simulated in weekly ticks. Two buildings each harvest solar
+energy and rainwater from the week's weather, and have to spend both on their
+residents and on the allotment on their roof. Each building runs two agents on
+the same model — a building manager speaking for the residents, and an
+allotment manager deciding what to plant, irrigate and harvest — which must
+agree how to divide a budget that is not big enough for both. Surplus produce
+goes to a shop agent that moves it between the buildings.
 
-High-yield crops are the rational individual choice, but a settlement that
-grows only tomatoes eats badly — and only the shop sees both allotments.
+The two buildings are identical apart from which model family runs their
+agents, so building 1 against building 2 is a model comparison.
 
 ## Setup
 
@@ -26,63 +28,44 @@ Keys: [build.nvidia.com](https://build.nvidia.com) (free credits, no card) and
 ## Run
 
 ```bash
-python main.py
+python main.py --seed 0 --condition baseline
 ```
+
+Runs one year -- four seasons of twelve weekly ticks -- and prints every week:
+each building's storage, weather, what the residents and the beds asked for and
+got, and anything harvested, then the shop. The same run is written to
+`data/seed-0-baseline.jsonl`: a `_meta` line (seed, condition, date, model
+names, opening crops), then one line per week, flushed as it goes. The same
+seed always gives the same weather and the same opening crops.
 
 ## Layout
 
 ```
-agents/       building and shop agents, model config
-settlement/   the model: weather, building, week
+agents/       the agents, and the model config they are built from
+settlement/   weather, infrastructure, buildings, allotments, the shop, the week
+data/         one JSONL file per run
 main.py       entry point
+NOTES.md      design decisions, sources and limitations, for the report
 ```
 
-## Where the numbers come from
+## What actually runs
 
-Areas are a design choice -- 200 m2 of roof, 60 m2 of panels, 140 m2 of beds.
-The rates are real UK figures:
+Each week, for each building:
 
-| quantity            | figure                            | source |
-| ------------------- | --------------------------------- | ------ |
-| rainfall            | 715.6 mm/yr, Nottingham 1991-2020 | [Met Office, Watnall](https://www.metoffice.gov.uk/research/climate/maps-and-data/location-specific-long-term-averages/gcrje93b8) |
-| rooftop PV yield    | 950 kWh/kWp/yr, approx 0.52 kWh/m2/day | [MCS MIS 3002](https://payaca.com/uk/solar-yield-calculator) |
-| vegetable irrigation| 30-50 L/m2/week, 63 L/m2/week dry in code | [RHS](https://rhs170.rhs.org.uk/vegetables/watering) |
-| allotment yield     | 1 kg/m2/season                    | [Univ. of Sussex, Brighton allotments](https://www.britishecologicalsociety.org/city-allotments-match-farming-productivity-per-square-metre/) |
+- weather is drawn for the season, and the roof collects sun and rain into
+  the battery and the rainwater tank
+- the residents take their energy, water and food; a third of the water they
+  use comes back into the greywater tank
+- the beds take the water and power they need -- none on a week with rain
+- the beds grow, slower when short of water or power, and ripe beds are
+  harvested into the allotment's own storage
 
-`panel_yield` and `rain_yield` in `settlement/building.py` are the rates on
-the brightest and wettest week, so an average week (intensity 0.5) gives the
-real-world average: 218 kWh and 2,749 litres.
+and the shop collects its own weather and runs itself on its panels.
 
-## Models
+Energy and water move between storages through `receive` and `spend`; produce,
+held lot by lot and ageing, through `move()`. Those doors are what the agents
+will use -- the agents themselves make no decisions yet, and nothing moves
+between the buildings, the allotments and the shop.
 
-One model per role. Buildings run different families so that building 1 vs
-building 2 is a model comparison.
-
-| role       | profile          | model                             |
-| ---------- | ---------------- | --------------------------------- |
-| building 1 | `nemotron_super` | nvidia/nemotron-3-super-120b-a12b |
-| building 2 | `gemini`         | gemini-3.6-flash                  |
-| shop       | `gpt_oss`        | openai/gpt-oss-20b                |
-
-Nemotron and gpt-oss are open weights, Gemini is proprietary.
-
-`model_configs` in `agents/config/model_config.py` also lists
-`nemotron_reasoning` and `mistral_nemotron`. Both are unreliable on NVIDIA's
-free tier -- they answer once and then time out or return 500. Left in place
-in case the capacity situation changes.
-
-## Status
-
-- [x] `Weather` — one week's sun and rain intensity, seeded
-- [x] `Building` — collects energy and water from the weather
-- [x] agents constructed from model config, and answering
-- [ ] residents and plots — something for the stores to be spent on
-- [ ] structured output — agents return numbers, not prose
-- [ ] managers agree the energy/water split
-- [ ] allotment plants / waters / harvests
-- [ ] residents consume, surplus to shop
-- [ ] `Season` — loop weeks, write JSONL
-- [ ] metrics, conditions, statistics and figures
-
-Known: NVIDIA's free tier is shared capacity and drops requests under load,
-so the season loop will need to handle a failed call rather than crash.
+Known: NVIDIA's free tier is shared capacity and drops requests under load, so
+the season loop will need to survive a failed call rather than crash.

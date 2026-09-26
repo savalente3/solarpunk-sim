@@ -1,0 +1,512 @@
+seed 0 | baseline | 2026-09-26
+models: building 1 no agent | building 2 no agent | shop no agent
+crops:  building 1 broccoli, lettuce | building 2 tomato, potato | shop carrot, beans
+
+Week 0 (spring)
+  day 4
+    building 1
+      ALARM    tank dropped below 40% (now 39.3%)
+      WAKE     manager woken by the alarm: tank dropped below 40%
+               sees  storage   battery 74.9% | tank 39.3% | food 47.5% | greywater 100.0%
+                     food      broccoli 47.5 kg (4 days old), lettuce 47.5 kg (4 days old)
+                     beds      14 growing: broccoli 7, lettuce 7 | 0 empty | furthest along 24%
+                     allotment nothing held
+                     tenants   fine
+                     weather   sun 0.83, no rain | spring, week 0
+  day 5
+    building 2
+      ALARM    tank dropped below 40% (now 38.6%)
+      WAKE     manager woken by the alarm: tank dropped below 40%
+               sees  storage   battery 90.7% | tank 38.6% | food 47.8% | greywater 100.0%
+                     food      tomato 47.78 kg (5 days old), potato 47.78 kg (5 days old)
+                     beds      14 growing: tomato 7, potato 7 | 0 empty | furthest along 29%
+                     allotment nothing held
+                     tenants   fine
+                     weather   sun 0.83, no rain | spring, week 0
+  day 6
+    building 1
+      WAKE     manager woken on the 3-day check: tank still below 40%
+               sees  storage   battery 84.8% | tank 34.1% | food 46.5% | greywater 100.0%
+                     food      broccoli 46.5 kg (6 days old), lettuce 46.5 kg (6 days old)
+                     beds      14 growing: broccoli 7, lettuce 7 | 0 empty | furthest along 33%
+                     allotment nothing held
+                     tenants   fine
+                     weather   sun 0.83, no rain | spring, week 0
+    building 2
+      WAKE     manager woken on the 3-day check: tank still below 40%
+               sees  storage   battery 90.7% | tank 36.3% | food 47.4% | greywater 100.0%
+                     food      tomato 47.41 kg (6 days old), potato 47.41 kg (6 days old)
+                     beds      14 growing: tomato 7, potato 7 | 0 empty | furthest along 33%
+                     allotment nothing held
+                     tenants   fine
+                     weather   sun 0.83, no rain | spring, week 0
+  end of week
+    Building 1:  alive True, energy 254.37, water 6829.07, greywater 500, food {'broccoli': 46.5, 'lettuce': 46.5}, produce {}
+      weather:        sun 0.83, rain 0.0
+      residents want: energy 244.65, water 1630.93, food 7.0
+      residents got:  energy 244.65, water 1630.93, food {'broccoli': 3.5, 'lettuce': 3.5}, greywater 0
+      beds want:      water 1540.0, energy 14.98
+      beds got:       energy 14.98, water 1540.0, food {}, greywater 0
+    Building 2:  alive True, energy 272.08, water 7257.12, greywater 500, food {'tomato': 47.41, 'potato': 47.41}, produce {}
+      weather:        sun 0.83, rain 0.0
+      residents want: energy 180.46, water 1202.88, food 5.18
+      residents got:  energy 180.46, water 1202.88, food {'tomato': 2.59, 'potato': 2.59}, greywater 0
+      beds want:      water 1540.0, energy 14.98
+      beds got:       energy 14.98, water 1540.0, food {}, greywater 0
+    Shop:        energy 247.0, water 12331, stock {'carrot': 125.0, 'beans': 125.0}
+
+Week 1 (spring)
+  day 2
+    building 1
+      WAKE     manager woken on the 3-day check: tank still below 40%
+               sees  storage   battery 88.3% | tank 25.5% | food 45.1% | greywater 100.0%
+                     food      broccoli 45.08 kg (9 days old), lettuce 45.07 kg (9 days old)
+                     beds      14 growing: broccoli 7, lettuce 7 | 0 empty | furthest along 48%
+                     allotment nothing held
+                     tenants   fine
+                     weather   sun 0.73, no rain | spring, week 1
+    building 2
+      WAKE     manager woken on the 3-day check: tank still below 40%
+               sees  storage   battery 91.4% | tank 39.3% | food 46.4% | greywater 100.0%
+                     food      tomato 46.4 kg (9 days old), potato 46.41 kg (9 days old)
+                     beds      14 growing: tomato 7, potato 7 | 0 empty | furthest along 48%
+                     allotment nothing held
+                     tenants   fine
+                     weather   sun 0.61, rain 0.15 | spring, week 1
+  day 5
+    building 1
+      WAKE     manager woken on the 3-day check: tank still below 40%
+               sees  storage   battery 88.3% | tank 15.7% | food 43.6% | greywater 100.0%
+                     food      broccoli 43.65 kg (12 days old), lettuce 43.65 kg (12 days old)
+                     beds      14 growing: broccoli 7, lettuce 7 | 0 empty | furthest along 62%
+                     allotment nothing held
+                     tenants   fine
+                     weather   sun 0.73, no rain | spring, week 1
+  end of week
+    Building 1:  alive True, energy 264.78, water 2438.76, greywater 500, food {'broccoli': 43.18, 'lettuce': 43.17}, produce {}
+      weather:        sun 0.73, rain 0.0
+      residents want: energy 231.56, water 1543.64, food 6.65
+      residents got:  energy 231.56, water 1543.64, food {'broccoli': 3.32, 'lettuce': 3.33}, greywater 0
+      beds want:      water 2846.67, energy 14.98
+      beds got:       energy 14.98, water 2846.67, food {}, greywater 0
+    Building 2:  alive True, energy 274.25, water 8654.53, greywater 500, food {'tomato': 45.06, 'potato': 45.07}, produce {}
+      weather:        sun 0.61, rain 0.15
+      residents want: energy 165.27, water 1101.59, food 4.69
+      residents got:  energy 165.27, water 1101.59, food {'tomato': 2.35, 'potato': 2.34}, greywater 0
+      beds want:      water 0, energy 14.98
+      beds got:       energy 14.98, water 0, food {}, greywater 0
+    Shop:        energy 292.86, water 12331, stock {'carrot': 125.0, 'beans': 125.0}
+
+Week 2 (spring)
+  day 0
+    building 2
+      ALARM    tank dropped below 40% (now 39.9%)
+      WAKE     manager woken by the alarm: tank dropped below 40%
+               sees  storage   battery 91.5% | tank 39.9% | food 44.7% | greywater 100.0%
+                     food      tomato 44.73 kg (14 days old), potato 44.73 kg (14 days old)
+                     beds      14 growing: tomato 7, potato 7 | 0 empty | furthest along 71%
+                     allotment nothing held
+                     tenants   fine
+                     weather   sun 0.58, no rain | spring, week 2
+  day 1
+    building 1
+      WAKE     manager woken on the 3-day check: tank still below 40%
+               sees  storage   battery 89.1% | tank 5.2% | food 42.4% | greywater 100.0%
+                     food      broccoli 42.45 kg (15 days old), lettuce 42.44 kg (15 days old)
+                     beds      14 growing: broccoli 7, lettuce 7 | 0 empty | furthest along 76%
+                     allotment nothing held
+                     tenants   fine
+                     weather   sun 0.46, no rain | spring, week 2
+    building 2
+      WAKE     manager woken on the 3-day check: tank still below 40%
+               sees  storage   battery 91.5% | tank 36.4% | food 44.4% | greywater 100.0%
+                     food      tomato 44.39 kg (15 days old), potato 44.4 kg (15 days old)
+                     beds      14 growing: tomato 7, potato 7 | 0 empty | furthest along 76%
+                     allotment nothing held
+                     tenants   fine
+                     weather   sun 0.58, no rain | spring, week 2
+  day 4
+    building 1
+      WAKE     manager woken on the 3-day check: tank still below 40%
+               sees  storage   battery 90.4% | tank 0.0% | food 41.4% | greywater 100.0%
+                     food      broccoli 41.35 kg (18 days old), lettuce 41.35 kg (18 days old)
+                     beds      14 growing: broccoli 7, lettuce 7 | 0 empty | furthest along 82%
+                     allotment nothing held
+                     tenants   1 days short of water
+                     weather   sun 0.46, no rain | spring, week 2
+    building 2
+      WAKE     manager woken on the 3-day check: tank still below 40%
+               sees  storage   battery 91.5% | tank 25.2% | food 43.4% | greywater 100.0%
+                     food      tomato 43.39 kg (18 days old), potato 43.39 kg (18 days old)
+                     beds      14 growing: tomato 7, potato 7 | 0 empty | furthest along 90%
+                     allotment nothing held
+                     tenants   fine
+                     weather   sun 0.58, no rain | spring, week 2
+  day 6
+    building 1
+      DEATH    tenants died: no water
+  end of week
+    Building 1:  empty, tenants gone
+    Building 2:  alive True, energy 274.43, water 3407.59, greywater 500, food {'tomato': 42.72, 'potato': 42.72}, produce {'tomato': 70, 'potato': 70}
+      weather:        sun 0.58, rain 0.0
+      residents want: energy 164.01, water 1093.61, food 4.69
+      residents got:  energy 164.01, water 1093.61, food {'tomato': 2.34, 'potato': 2.35}, greywater 0
+      beds want:      water 4153.33, energy 14.98
+      beds got:       energy 14.98, water 4153.33, food {}, greywater 0
+      harvested:      10 kg tomato
+      harvested:      10 kg potato
+      harvested:      10 kg tomato
+      harvested:      10 kg potato
+      harvested:      10 kg tomato
+      harvested:      10 kg potato
+      harvested:      10 kg tomato
+      harvested:      10 kg potato
+      harvested:      10 kg tomato
+      harvested:      10 kg potato
+      harvested:      10 kg tomato
+      harvested:      10 kg potato
+      harvested:      10 kg tomato
+      harvested:      10 kg potato
+    Shop:        energy 292.86, water 20000, stock {'carrot': 125.0, 'beans': 125.0}
+
+Week 3 (spring)
+  day 0
+    building 2
+      ROTTED   84.48 kg went off
+      ALARM    food dropped below 40% (now 0.0%)
+      WAKE     manager woken by the alarm: food dropped below 40%
+               sees  storage   battery 88.1% | tank 15.9% | food 0.0% | greywater 100.0%
+                     food      nothing held
+                     beds      0 growing:  | 14 empty
+                     allotment tomato 70 kg (1 days old), potato 70 kg (1 days old)
+                     tenants   fine
+                     weather   sun 0.62, no rain | spring, week 3
+    shop
+      ROTTED   250.0 kg went off
+  day 3
+    building 2
+      WAKE     manager woken on the 3-day check: food still below 40%, tank still below 40%, beds empty
+               sees  storage   battery 88.1% | tank 12.6% | food 0.0% | greywater 100.0%
+                     food      nothing held
+                     beds      0 growing:  | 14 empty
+                     allotment tomato 70 kg (4 days old), potato 70 kg (4 days old)
+                     tenants   3 days short of food
+                     weather   sun 0.62, no rain | spring, week 3
+  day 6
+    building 2
+      WAKE     manager woken on the 3-day check: food still below 40%, tank still below 40%, beds empty
+               sees  storage   battery 88.1% | tank 9.2% | food 0.0% | greywater 100.0%
+                     food      nothing held
+                     beds      0 growing:  | 14 empty
+                     allotment tomato 70 kg (7 days old), potato 70 kg (7 days old)
+                     tenants   6 days short of food
+                     weather   sun 0.62, no rain | spring, week 3
+  end of week
+    Building 1:  empty, tenants gone
+    Building 2:  alive True, energy 264.41, water 1846.38, greywater 500, food {}, produce {'tomato': 70, 'potato': 70}
+      weather:        sun 0.62, rain 0.0
+      residents want: energy 234.15, water 1561.21, food 6.72
+      residents got:  energy 234.15, water 1561.21, food {'tomato': 0.48, 'potato': 0.48}, greywater 0
+      beds want:      water 0, energy 14.98
+      beds got:       energy 14.98, water 0, food {}, greywater 0
+    Shop:        energy 292.86, water 20000, stock {}
+
+Week 4 (spring)
+  day 2
+    building 2
+      WAKE     manager woken on the 3-day check: food still below 40%, tank still below 40%, beds empty
+               sees  storage   battery 67.5% | tank 5.5% | food 0.0% | greywater 100.0%
+                     food      nothing held
+                     beds      0 growing:  | 14 empty
+                     allotment tomato 70 kg (10 days old), potato 70 kg (10 days old)
+                     tenants   9 days short of food
+                     weather   sun 0.3, no rain | spring, week 4
+  day 5
+    building 2
+      WAKE     manager woken on the 3-day check: food still below 40%, tank still below 40%, beds empty
+               sees  storage   battery 46.9% | tank 1.7% | food 0.0% | greywater 100.0%
+                     food      nothing held
+                     beds      0 growing:  | 14 empty
+                     allotment tomato 70 kg (13 days old), potato 70 kg (13 days old)
+                     tenants   12 days short of food
+                     weather   sun 0.3, no rain | spring, week 4
+  end of week
+    Building 1:  empty, tenants gone
+    Building 2:  alive True, energy 120.14, water 97.78, greywater 500, food {}, produce {'tomato': 70, 'potato': 70}
+      weather:        sun 0.3, rain 0.0
+      residents want: energy 262.29, water 1748.6, food 7.49
+      residents got:  energy 262.29, water 1748.6, food {}, greywater 0
+      beds want:      water 0, energy 14.98
+      beds got:       energy 14.98, water 0, food {}, greywater 0
+    Shop:        energy 292.86, water 20000, stock {}
+
+Week 5 (spring)
+  day 1
+    building 2
+      WAKE     manager woken on the 3-day check: food still below 40%, tank still below 40%, beds empty
+               sees  storage   battery 53.4% | tank 0.0% | food 0.0% | greywater 100.0%
+                     food      nothing held
+                     beds      0 growing:  | 14 empty
+                     allotment tomato 70 kg (16 days old), potato 70 kg (16 days old)
+                     tenants   2 days short of water, 15 days short of food
+                     weather   sun 0.73, no rain | spring, week 5
+  day 2
+    building 2
+      DEATH    tenants died: no water
+  end of week
+    Building 1:  empty, tenants gone
+    Building 2:  empty, tenants gone
+    Shop:        energy 292.86, water 20000, stock {}
+
+Week 6 (spring)
+  end of week
+    Building 1:  empty, tenants gone
+    Building 2:  empty, tenants gone
+    Shop:        energy 292.86, water 20000, stock {}
+
+Week 7 (spring)
+  end of week
+    Building 1:  empty, tenants gone
+    Building 2:  empty, tenants gone
+    Shop:        energy 292.86, water 20000, stock {}
+
+Week 8 (spring)
+  end of week
+    Building 1:  empty, tenants gone
+    Building 2:  empty, tenants gone
+    Shop:        energy 292.86, water 20000, stock {}
+
+Week 9 (spring)
+  end of week
+    Building 1:  empty, tenants gone
+    Building 2:  empty, tenants gone
+    Shop:        energy 292.86, water 20000, stock {}
+
+Week 10 (spring)
+  end of week
+    Building 1:  empty, tenants gone
+    Building 2:  empty, tenants gone
+    Shop:        energy 292.86, water 20000, stock {}
+
+Week 11 (spring)
+  end of week
+    Building 1:  empty, tenants gone
+    Building 2:  empty, tenants gone
+    Shop:        energy 292.86, water 20000, stock {}
+
+Week 12 (summer)
+  end of week
+    Building 1:  empty, tenants gone
+    Building 2:  empty, tenants gone
+    Shop:        energy 292.86, water 20000, stock {}
+
+Week 13 (summer)
+  end of week
+    Building 1:  empty, tenants gone
+    Building 2:  empty, tenants gone
+    Shop:        energy 292.86, water 20000, stock {}
+
+Week 14 (summer)
+  end of week
+    Building 1:  empty, tenants gone
+    Building 2:  empty, tenants gone
+    Shop:        energy 292.86, water 20000, stock {}
+
+Week 15 (summer)
+  end of week
+    Building 1:  empty, tenants gone
+    Building 2:  empty, tenants gone
+    Shop:        energy 292.86, water 20000, stock {}
+
+Week 16 (summer)
+  end of week
+    Building 1:  empty, tenants gone
+    Building 2:  empty, tenants gone
+    Shop:        energy 292.86, water 20000, stock {}
+
+Week 17 (summer)
+  end of week
+    Building 1:  empty, tenants gone
+    Building 2:  empty, tenants gone
+    Shop:        energy 292.86, water 20000, stock {}
+
+Week 18 (summer)
+  end of week
+    Building 1:  empty, tenants gone
+    Building 2:  empty, tenants gone
+    Shop:        energy 292.86, water 20000, stock {}
+
+Week 19 (summer)
+  end of week
+    Building 1:  empty, tenants gone
+    Building 2:  empty, tenants gone
+    Shop:        energy 292.86, water 20000, stock {}
+
+Week 20 (summer)
+  end of week
+    Building 1:  empty, tenants gone
+    Building 2:  empty, tenants gone
+    Shop:        energy 292.86, water 20000, stock {}
+
+Week 21 (summer)
+  end of week
+    Building 1:  empty, tenants gone
+    Building 2:  empty, tenants gone
+    Shop:        energy 292.86, water 20000, stock {}
+
+Week 22 (summer)
+  end of week
+    Building 1:  empty, tenants gone
+    Building 2:  empty, tenants gone
+    Shop:        energy 292.86, water 20000, stock {}
+
+Week 23 (summer)
+  end of week
+    Building 1:  empty, tenants gone
+    Building 2:  empty, tenants gone
+    Shop:        energy 292.86, water 20000, stock {}
+
+Week 24 (autumn)
+  end of week
+    Building 1:  empty, tenants gone
+    Building 2:  empty, tenants gone
+    Shop:        energy 292.86, water 20000, stock {}
+
+Week 25 (autumn)
+  end of week
+    Building 1:  empty, tenants gone
+    Building 2:  empty, tenants gone
+    Shop:        energy 292.86, water 20000, stock {}
+
+Week 26 (autumn)
+  end of week
+    Building 1:  empty, tenants gone
+    Building 2:  empty, tenants gone
+    Shop:        energy 270.86, water 20000, stock {}
+
+Week 27 (autumn)
+  end of week
+    Building 1:  empty, tenants gone
+    Building 2:  empty, tenants gone
+    Shop:        energy 292.86, water 20000, stock {}
+
+Week 28 (autumn)
+  end of week
+    Building 1:  empty, tenants gone
+    Building 2:  empty, tenants gone
+    Shop:        energy 292.86, water 20000, stock {}
+
+Week 29 (autumn)
+  end of week
+    Building 1:  empty, tenants gone
+    Building 2:  empty, tenants gone
+    Shop:        energy 292.86, water 20000, stock {}
+
+Week 30 (autumn)
+  end of week
+    Building 1:  empty, tenants gone
+    Building 2:  empty, tenants gone
+    Shop:        energy 292.86, water 20000, stock {}
+
+Week 31 (autumn)
+  end of week
+    Building 1:  empty, tenants gone
+    Building 2:  empty, tenants gone
+    Shop:        energy 292.86, water 20000, stock {}
+
+Week 32 (autumn)
+  end of week
+    Building 1:  empty, tenants gone
+    Building 2:  empty, tenants gone
+    Shop:        energy 292.86, water 20000, stock {}
+
+Week 33 (autumn)
+  end of week
+    Building 1:  empty, tenants gone
+    Building 2:  empty, tenants gone
+    Shop:        energy 292.86, water 20000, stock {}
+
+Week 34 (autumn)
+  end of week
+    Building 1:  empty, tenants gone
+    Building 2:  empty, tenants gone
+    Shop:        energy 292.86, water 20000, stock {}
+
+Week 35 (autumn)
+  end of week
+    Building 1:  empty, tenants gone
+    Building 2:  empty, tenants gone
+    Shop:        energy 292.86, water 20000, stock {}
+
+Week 36 (winter)
+  end of week
+    Building 1:  empty, tenants gone
+    Building 2:  empty, tenants gone
+    Shop:        energy 292.86, water 20000, stock {}
+
+Week 37 (winter)
+  end of week
+    Building 1:  empty, tenants gone
+    Building 2:  empty, tenants gone
+    Shop:        energy 292.86, water 20000, stock {}
+
+Week 38 (winter)
+  end of week
+    Building 1:  empty, tenants gone
+    Building 2:  empty, tenants gone
+    Shop:        energy 270.86, water 20000, stock {}
+
+Week 39 (winter)
+  end of week
+    Building 1:  empty, tenants gone
+    Building 2:  empty, tenants gone
+    Shop:        energy 248.86, water 20000, stock {}
+
+Week 40 (winter)
+  end of week
+    Building 1:  empty, tenants gone
+    Building 2:  empty, tenants gone
+    Shop:        energy 292.86, water 20000, stock {}
+
+Week 41 (winter)
+  end of week
+    Building 1:  empty, tenants gone
+    Building 2:  empty, tenants gone
+    Shop:        energy 291.86, water 20000, stock {}
+
+Week 42 (winter)
+  end of week
+    Building 1:  empty, tenants gone
+    Building 2:  empty, tenants gone
+    Shop:        energy 292.86, water 20000, stock {}
+
+Week 43 (winter)
+  end of week
+    Building 1:  empty, tenants gone
+    Building 2:  empty, tenants gone
+    Shop:        energy 263.86, water 20000, stock {}
+
+Week 44 (winter)
+  end of week
+    Building 1:  empty, tenants gone
+    Building 2:  empty, tenants gone
+    Shop:        energy 292.86, water 20000, stock {}
+
+Week 45 (winter)
+  end of week
+    Building 1:  empty, tenants gone
+    Building 2:  empty, tenants gone
+    Shop:        energy 284.86, water 20000, stock {}
+
+Week 46 (winter)
+  end of week
+    Building 1:  empty, tenants gone
+    Building 2:  empty, tenants gone
+    Shop:        energy 292.86, water 20000, stock {}
+
+Week 47 (winter)
+  end of week
+    Building 1:  empty, tenants gone
+    Building 2:  empty, tenants gone
+    Shop:        energy 292.86, water 20000, stock {}
+
