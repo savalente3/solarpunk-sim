@@ -157,12 +157,28 @@ class Community:
         fraction = 1 / self.days
         building.collect(weather, fraction)
 
+        # - the tenants use what the manager allows of what they need
         residents_want = building.needs(rate, fraction)
-        beds_want = building.allotment.needs(weather, fraction)
+        allowed = {}
+        for resource, amount in residents_want.items():
+            allowed[resource] = round(amount * building.allowance[resource], 2)
 
-        residents_got = building.spend(**residents_want)
+        residents_got = building.spend(**allowed)
         building.recover(residents_got["water"])
-        beds_got = building.spend(**beds_want)
+
+        # - the beds get what the manager gives them each day -- greywater first,
+        #   and never more than they can use; with no decision yet they take what they need
+        beds_want = building.allotment.needs(weather, fraction)
+        if building.bed_supply is None:
+            beds_ask = beds_want
+        else:
+            grey = min(building.bed_supply["greywater"], beds_want["water"])
+            fresh = min(building.bed_supply["water"], beds_want["water"] - grey)
+            energy = min(building.bed_supply["energy"], beds_want["energy"])
+            beds_ask = {"water": round(fresh, 2), "greywater": round(grey, 2), "energy": round(energy, 2)}
+
+        beds_got = building.spend(**beds_ask)
+        building.need_today = {"tenants": residents_want, "beds": beds_want}
 
         # - fresh and grey are one pool once they reach the beds
         watered = beds_got["water"] + beds_got["greywater"]
@@ -193,9 +209,9 @@ class Community:
 
     def wake(self, day_of_year, day, season, skies, events):
         # - who has something to decide today, and why -- no reason, no call
-        # - an alarm wakes a place at once; otherwise it is checked every few days
-        # - this is where the agents will act; for now it only records the wake
-        scheduled = day_of_year % self.wake_days == 0
+        # - an alarm wakes a place at once; otherwise it is checked every few days,
+        #   or when its manager asked to be
+        # - a building run by agents is consulted there and then
         line = round(self.alarm_level * 100)
 
         places = []
@@ -205,6 +221,10 @@ class Community:
         places.append(("shop", self.shop))
 
         for name, place in places:
+            scheduled = day_of_year >= place.next_check
+            if scheduled:
+                place.next_check = day_of_year + self.wake_days
+
             reasons = []
             trigger = "alarm"
             for event in events:
@@ -217,17 +237,48 @@ class Community:
                     reasons.append(f"{storage} still below {line}%")
                 if name != "shop" and place.allotment.bare():
                     reasons.append("beds empty")
+                if name != "shop" and place.check_asked:
+                    reasons.append("the check you asked for")
+
+            if scheduled and name != "shop":
+                place.check_asked = False
 
             if reasons:
                 # - what the agent is shown when it wakes: the moment, and the place as it stands
+                weather = skies[name].intensity
                 sees = {
                     "week": day_of_year // self.days,
                     "day": day,
                     "season": season,
-                    "weather": skies[name].intensity,
+                    "weather": weather,
+                    "coming_in": {
+                        "energy": round(weather["sun"] * place.panel_area * place.panel_yield / self.days, 1),
+                        "water": round(weather["rain"] * place.roof_area * place.rain_yield / self.days),
+                    },
                 }
                 sees.update(place.snapshot(day_of_year))
                 events.append({"day": day, "place": name, "event": "wake", "trigger": trigger, "why": reasons, "sees": sees})
+
+                if name != "shop" and place.managers is not None:
+                    self.consult(place, sees, reasons, day_of_year, day, events)
+
+    def consult(self, building, sees, why, day_of_year, day, events):
+        # - the allotment manager says what the beds need, the building manager
+        #   decides, and the building carries it out
+        # - an answer that cannot be read changes nothing: the last decision stays
+        exchanges, decision = building.managers.decide(sees, why)
+        for exchange in exchanges:
+            record = {"day": day, "place": building.name, "event": "exchange"}
+            record.update(exchange)
+            events.append(record)
+
+        if decision is None:
+            refused = ["your last answer could not be read, so your previous decision stayed in force"]
+        else:
+            refused = building.apply(decision, day_of_year)
+
+        events.append({"day": day, "place": building.name, "event": "decision", "refused": refused})
+        building.managers.refused = refused
 
     def run_season(self, name, first_week, rng):
         # - twelve weeks under the same season, handed back one at a time

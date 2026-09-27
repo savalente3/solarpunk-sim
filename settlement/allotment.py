@@ -107,14 +107,25 @@ class Allotment:
         #   stands empty, and each bed's crop, growth and dry days
         growing = {}
         beds = []
+        furthest = None
+        driest = 0
         for bed in self.beds:
             if bed is None:
                 beds.append(None)
                 continue
             growing[bed["crop"]] = growing.get(bed["crop"], 0) + 1
             beds.append({"crop": bed["crop"], "grown": round(bed["maturity"] * 100), "dry_days": bed["dry"]})
+            furthest = max(furthest or 0, round(bed["maturity"] * 100))
+            driest = max(driest, bed["dry"])
 
-        return {"growing": growing, "empty": len(self.bare()), "beds": beds}
+        return {
+            "growing": growing,
+            "empty": len(self.bare()),
+            "furthest": furthest,
+            "driest": driest,
+            "driest_dies_in": self.wilt_days - driest if driest else None,
+            "beds": beds,
+        }
 
     def bare(self):
         # - which beds are empty, waiting to be planted

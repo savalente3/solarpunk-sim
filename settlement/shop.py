@@ -5,7 +5,6 @@ short of, so the shop is what lets variety move around the settlement. It has
 a roof like the buildings, runs itself on its own panels, and needs no water --
 so what its cistern catches is there to give.
 """
-from agents.shop_manager import ShopManager
 from settlement.infrastructure import Infrastructure
 from settlement.produce import Produce
 
@@ -17,19 +16,22 @@ class Shop(Infrastructure):
     # - what the shop burns on itself in a week
     energy_use = 50         # kWh, refrigeration and lighting
 
-    def __init__(self, model_config, crops):
+    # - what the shop opens with, of every crop
+    opening_kg = 5
+
+    def __init__(self, crops, manager=None):
         super().__init__()
 
-        # - the shop opens half full on the crops the roofs don't grow, so there is
-        #   variety to offer from day one -- and it ages from the day the run starts
+        # - the shop opens on a little of every crop: variety rather than volume,
+        #   small enough to be eaten before it rots, and ageing from the day the run starts
         self.stock = Produce(self.capacity)
         opening = []
         for crop in crops:
-            opening.append({"crop": crop, "kg": round(self.capacity / 2 / len(crops), 2), "picked": 0})
+            opening.append({"crop": crop, "kg": self.opening_kg, "picked": 0})
         self.stock.take(opening)
 
-        # - no model means no agent: a baseline run
-        self.manager = ShopManager(model_config) if model_config else None
+        # - the shop's agent, handed in; none means it is not run by an agent
+        self.manager = manager
 
     def snapshot(self, today):
         # - what the shop looks like right now: what its agent is shown

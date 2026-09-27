@@ -1,153 +1,225 @@
 seed 0 | baseline | 2026-09-26
 models: building 1 no agent | building 2 no agent | shop no agent
-crops:  building 1 broccoli, lettuce | building 2 tomato, potato | shop carrot, beans
+crops:  building 1 broccoli, lettuce | building 2 tomato, potato | shop tomato, carrot, potato, broccoli, beans, lettuce
 
 Week 0 (spring)
+  day 3
+    building 1
+      ALARM     food dropped below 40% (now 36.7%)
+      WAKE      managers woken by the alarm: food dropped below 40%
+                sees  storage   battery 69.9% | tank 41.7% | food 36.7% | greywater 100.0%
+                      amounts   energy 209.64 kWh | water 8348.04 L | greywater 500 L
+                      coming in about 51.8 kWh of sun and no rain a day this week
+                      needs     tenants 34.95 kWh, 232.99 L water, 1.0 kg food a day | beds 220.0 L water, 2.14 kWh a day
+                      rules     tenants may use 100% energy, 100% water, 100% food | beds take what they need
+                      food      broccoli 5.5 kg (3 days old → rots in 18 days), lettuce 5.5 kg (3 days old → rots in 18 days)
+                      beds      14 growing: broccoli 7, lettuce 7 | 0 empty | furthest along 19%
+                      allotment nothing held
+                      tenants   fine
   day 4
     building 1
-      ALARM    tank dropped below 40% (now 39.3%)
-      WAKE     manager woken by the alarm: tank dropped below 40%
-               sees  storage   battery 74.9% | tank 39.3% | food 47.5% | greywater 100.0%
-                     food      broccoli 47.5 kg (4 days old), lettuce 47.5 kg (4 days old)
-                     beds      14 growing: broccoli 7, lettuce 7 | 0 empty | furthest along 24%
-                     allotment nothing held
-                     tenants   fine
-                     weather   sun 0.83, no rain | spring, week 0
+      ALARM     tank dropped below 40% (now 39.3%)
+      WAKE      managers woken by the alarm: tank dropped below 40%
+                sees  storage   battery 74.9% | tank 39.3% | food 33.3% | greywater 100.0%
+                      amounts   energy 224.55 kWh | water 7868.38 L | greywater 500 L
+                      coming in about 51.8 kWh of sun and no rain a day this week
+                      needs     tenants 34.95 kWh, 232.99 L water, 1.0 kg food a day | beds 246.67 L water, 2.14 kWh a day
+                      rules     tenants may use 100% energy, 100% water, 100% food | beds take what they need
+                      food      broccoli 5.0 kg (4 days old → rots in 17 days), lettuce 5.0 kg (4 days old → rots in 17 days)
+                      beds      14 growing: broccoli 7, lettuce 7 | 0 empty | furthest along 24%
+                      allotment nothing held
+                      tenants   fine
+    building 2
+      ALARM     food dropped below 40% (now 37.7%)
+      WAKE      managers woken by the alarm: food dropped below 40%
+                sees  storage   battery 90.1% | tank 40.9% | food 37.7% | greywater 100.0%
+                      amounts   energy 270.4 kWh | water 8174.13 L | greywater 500 L
+                      coming in about 51.8 kWh of sun and no rain a day this week
+                      needs     tenants 25.78 kWh, 171.84 L water, 0.74 kg food a day | beds 246.67 L water, 2.14 kWh a day
+                      rules     tenants may use 100% energy, 100% water, 100% food | beds take what they need
+                      food      tomato 5.65 kg (4 days old → rots in 17 days), potato 5.65 kg (4 days old → rots in 17 days)
+                      beds      14 growing: tomato 7, potato 7 | 0 empty | furthest along 24%
+                      allotment nothing held
+                      tenants   fine
   day 5
     building 2
-      ALARM    tank dropped below 40% (now 38.6%)
-      WAKE     manager woken by the alarm: tank dropped below 40%
-               sees  storage   battery 90.7% | tank 38.6% | food 47.8% | greywater 100.0%
-                     food      tomato 47.78 kg (5 days old), potato 47.78 kg (5 days old)
-                     beds      14 growing: tomato 7, potato 7 | 0 empty | furthest along 29%
-                     allotment nothing held
-                     tenants   fine
-                     weather   sun 0.83, no rain | spring, week 0
+      ALARM     tank dropped below 40% (now 38.6%)
+      WAKE      managers woken by the alarm: tank dropped below 40%
+                sees  storage   battery 90.7% | tank 38.6% | food 35.2% | greywater 100.0%
+                      amounts   energy 272.08 kWh | water 7728.96 L | greywater 500 L
+                      coming in about 51.8 kWh of sun and no rain a day this week
+                      needs     tenants 25.78 kWh, 171.84 L water, 0.74 kg food a day | beds 273.33 L water, 2.14 kWh a day
+                      rules     tenants may use 100% energy, 100% water, 100% food | beds take what they need
+                      food      tomato 5.28 kg (5 days old → rots in 16 days), potato 5.28 kg (5 days old → rots in 16 days)
+                      beds      14 growing: tomato 7, potato 7 | 0 empty | furthest along 29%
+                      allotment nothing held
+                      tenants   fine
   day 6
     building 1
-      WAKE     manager woken on the 3-day check: tank still below 40%
-               sees  storage   battery 84.8% | tank 34.1% | food 46.5% | greywater 100.0%
-                     food      broccoli 46.5 kg (6 days old), lettuce 46.5 kg (6 days old)
-                     beds      14 growing: broccoli 7, lettuce 7 | 0 empty | furthest along 33%
-                     allotment nothing held
-                     tenants   fine
-                     weather   sun 0.83, no rain | spring, week 0
+      WAKE      managers woken on a check: food still below 40%, tank still below 40%
+                sees  storage   battery 84.8% | tank 34.1% | food 26.7% | greywater 100.0%
+                      amounts   energy 254.37 kWh | water 6829.07 L | greywater 500 L
+                      coming in about 51.8 kWh of sun and no rain a day this week
+                      needs     tenants 34.95 kWh, 232.99 L water, 1.0 kg food a day | beds 300.0 L water, 2.14 kWh a day
+                      rules     tenants may use 100% energy, 100% water, 100% food | beds take what they need
+                      food      broccoli 4.0 kg (6 days old → rots in 15 days), lettuce 4.0 kg (6 days old → rots in 15 days)
+                      beds      14 growing: broccoli 7, lettuce 7 | 0 empty | furthest along 33%
+                      allotment nothing held
+                      tenants   fine
     building 2
-      WAKE     manager woken on the 3-day check: tank still below 40%
-               sees  storage   battery 90.7% | tank 36.3% | food 47.4% | greywater 100.0%
-                     food      tomato 47.41 kg (6 days old), potato 47.41 kg (6 days old)
-                     beds      14 growing: tomato 7, potato 7 | 0 empty | furthest along 33%
-                     allotment nothing held
-                     tenants   fine
-                     weather   sun 0.83, no rain | spring, week 0
+      WAKE      managers woken on a check: food still below 40%, tank still below 40%
+                sees  storage   battery 90.7% | tank 36.3% | food 32.7% | greywater 100.0%
+                      amounts   energy 272.08 kWh | water 7257.12 L | greywater 500 L
+                      coming in about 51.8 kWh of sun and no rain a day this week
+                      needs     tenants 25.78 kWh, 171.84 L water, 0.74 kg food a day | beds 300.0 L water, 2.14 kWh a day
+                      rules     tenants may use 100% energy, 100% water, 100% food | beds take what they need
+                      food      tomato 4.91 kg (6 days old → rots in 15 days), potato 4.91 kg (6 days old → rots in 15 days)
+                      beds      14 growing: tomato 7, potato 7 | 0 empty | furthest along 33%
+                      allotment nothing held
+                      tenants   fine
   end of week
-    Building 1:  alive True, energy 254.37, water 6829.07, greywater 500, food {'broccoli': 46.5, 'lettuce': 46.5}, produce {}
+    Building 1:  alive True, energy 254.37, water 6829.07, greywater 500, food {'broccoli': 4.0, 'lettuce': 4.0}, produce {}
       weather:        sun 0.83, rain 0.0
       residents want: energy 244.65, water 1630.93, food 7.0
       residents got:  energy 244.65, water 1630.93, food {'broccoli': 3.5, 'lettuce': 3.5}, greywater 0
       beds want:      water 1540.0, energy 14.98
       beds got:       energy 14.98, water 1540.0, food {}, greywater 0
-    Building 2:  alive True, energy 272.08, water 7257.12, greywater 500, food {'tomato': 47.41, 'potato': 47.41}, produce {}
+    Building 2:  alive True, energy 272.08, water 7257.12, greywater 500, food {'tomato': 4.91, 'potato': 4.91}, produce {}
       weather:        sun 0.83, rain 0.0
       residents want: energy 180.46, water 1202.88, food 5.18
       residents got:  energy 180.46, water 1202.88, food {'tomato': 2.59, 'potato': 2.59}, greywater 0
       beds want:      water 1540.0, energy 14.98
       beds got:       energy 14.98, water 1540.0, food {}, greywater 0
-    Shop:        energy 247.0, water 12331, stock {'carrot': 125.0, 'beans': 125.0}
+    Shop:        energy 247.0, water 12331, stock {'tomato': 5, 'carrot': 5, 'potato': 5, 'broccoli': 5, 'beans': 5, 'lettuce': 5}
 
 Week 1 (spring)
   day 2
     building 1
-      WAKE     manager woken on the 3-day check: tank still below 40%
-               sees  storage   battery 88.3% | tank 25.5% | food 45.1% | greywater 100.0%
-                     food      broccoli 45.08 kg (9 days old), lettuce 45.07 kg (9 days old)
-                     beds      14 growing: broccoli 7, lettuce 7 | 0 empty | furthest along 48%
-                     allotment nothing held
-                     tenants   fine
-                     weather   sun 0.73, no rain | spring, week 1
+      WAKE      managers woken on a check: food still below 40%, tank still below 40%
+                sees  storage   battery 88.3% | tank 25.5% | food 17.2% | greywater 100.0%
+                      amounts   energy 264.78 kWh | water 5107.51 L | greywater 500 L
+                      coming in about 45.6 kWh of sun and no rain a day this week
+                      needs     tenants 33.08 kWh, 220.52 L water, 0.95 kg food a day | beds 380.0 L water, 2.14 kWh a day
+                      rules     tenants may use 100% energy, 100% water, 100% food | beds take what they need
+                      food      broccoli 2.58 kg (9 days old → rots in 12 days), lettuce 2.57 kg (9 days old → rots in 12 days)
+                      beds      14 growing: broccoli 7, lettuce 7 | 0 empty | furthest along 48%
+                      allotment nothing held
+                      tenants   fine
     building 2
-      WAKE     manager woken on the 3-day check: tank still below 40%
-               sees  storage   battery 91.4% | tank 39.3% | food 46.4% | greywater 100.0%
-                     food      tomato 46.4 kg (9 days old), potato 46.41 kg (9 days old)
-                     beds      14 growing: tomato 7, potato 7 | 0 empty | furthest along 48%
-                     allotment nothing held
-                     tenants   fine
-                     weather   sun 0.61, rain 0.15 | spring, week 1
+      WAKE      managers woken on a check: food still below 40%, tank still below 40%
+                sees  storage   battery 91.4% | tank 39.3% | food 26.0% | greywater 100.0%
+                      amounts   energy 274.25 kWh | water 7856.01 L | greywater 500 L
+                      coming in about 38.1 kWh of sun and 357 L of rain a day this week
+                      needs     tenants 23.61 kWh, 157.37 L water, 0.67 kg food a day | beds 0 L water, 2.14 kWh a day
+                      rules     tenants may use 100% energy, 100% water, 100% food | beds take what they need
+                      food      tomato 3.9 kg (9 days old → rots in 12 days), potato 3.91 kg (9 days old → rots in 12 days)
+                      beds      14 growing: tomato 7, potato 7 | 0 empty | furthest along 48%
+                      allotment nothing held
+                      tenants   fine
   day 5
     building 1
-      WAKE     manager woken on the 3-day check: tank still below 40%
-               sees  storage   battery 88.3% | tank 15.7% | food 43.6% | greywater 100.0%
-                     food      broccoli 43.65 kg (12 days old), lettuce 43.65 kg (12 days old)
-                     beds      14 growing: broccoli 7, lettuce 7 | 0 empty | furthest along 62%
-                     allotment nothing held
-                     tenants   fine
-                     weather   sun 0.73, no rain | spring, week 1
+      WAKE      managers woken on a check: food still below 40%, tank still below 40%
+                sees  storage   battery 88.3% | tank 15.7% | food 7.7% | greywater 100.0%
+                      amounts   energy 264.78 kWh | water 3145.95 L | greywater 500 L
+                      coming in about 45.6 kWh of sun and no rain a day this week
+                      needs     tenants 33.08 kWh, 220.52 L water, 0.95 kg food a day | beds 460.0 L water, 2.14 kWh a day
+                      rules     tenants may use 100% energy, 100% water, 100% food | beds take what they need
+                      food      broccoli 1.15 kg (12 days old → rots in 9 days), lettuce 1.15 kg (12 days old → rots in 9 days)
+                      beds      14 growing: broccoli 7, lettuce 7 | 0 empty | furthest along 62%
+                      allotment nothing held
+                      tenants   fine
+    building 2
+      WAKE      managers woken on a check: food still below 40%
+                sees  storage   battery 91.4% | tank 42.3% | food 19.3% | greywater 100.0%
+                      amounts   energy 274.25 kWh | water 8454.9 L | greywater 500 L
+                      coming in about 38.1 kWh of sun and 357 L of rain a day this week
+                      needs     tenants 23.61 kWh, 157.37 L water, 0.67 kg food a day | beds 0 L water, 2.14 kWh a day
+                      rules     tenants may use 100% energy, 100% water, 100% food | beds take what they need
+                      food      tomato 2.9 kg (12 days old → rots in 9 days), potato 2.9 kg (12 days old → rots in 9 days)
+                      beds      14 growing: tomato 7, potato 7 | 0 empty | furthest along 62%
+                      allotment nothing held
+                      tenants   fine
   end of week
-    Building 1:  alive True, energy 264.78, water 2438.76, greywater 500, food {'broccoli': 43.18, 'lettuce': 43.17}, produce {}
+    Building 1:  alive True, energy 264.78, water 2438.76, greywater 500, food {'broccoli': 0.68, 'lettuce': 0.67}, produce {}
       weather:        sun 0.73, rain 0.0
       residents want: energy 231.56, water 1543.64, food 6.65
       residents got:  energy 231.56, water 1543.64, food {'broccoli': 3.32, 'lettuce': 3.33}, greywater 0
       beds want:      water 2846.67, energy 14.98
       beds got:       energy 14.98, water 2846.67, food {}, greywater 0
-    Building 2:  alive True, energy 274.25, water 8654.53, greywater 500, food {'tomato': 45.06, 'potato': 45.07}, produce {}
+    Building 2:  alive True, energy 274.25, water 8654.53, greywater 500, food {'tomato': 2.56, 'potato': 2.57}, produce {}
       weather:        sun 0.61, rain 0.15
       residents want: energy 165.27, water 1101.59, food 4.69
       residents got:  energy 165.27, water 1101.59, food {'tomato': 2.35, 'potato': 2.34}, greywater 0
       beds want:      water 0, energy 14.98
       beds got:       energy 14.98, water 0, food {}, greywater 0
-    Shop:        energy 292.86, water 12331, stock {'carrot': 125.0, 'beans': 125.0}
+    Shop:        energy 292.86, water 12331, stock {'tomato': 5, 'carrot': 5, 'potato': 5, 'broccoli': 5, 'beans': 5, 'lettuce': 5}
 
 Week 2 (spring)
   day 0
     building 2
-      ALARM    tank dropped below 40% (now 39.9%)
-      WAKE     manager woken by the alarm: tank dropped below 40%
-               sees  storage   battery 91.5% | tank 39.9% | food 44.7% | greywater 100.0%
-                     food      tomato 44.73 kg (14 days old), potato 44.73 kg (14 days old)
-                     beds      14 growing: tomato 7, potato 7 | 0 empty | furthest along 71%
-                     allotment nothing held
-                     tenants   fine
-                     weather   sun 0.58, no rain | spring, week 2
+      ALARM     tank dropped below 40% (now 39.9%)
+      WAKE      managers woken by the alarm: tank dropped below 40%
+                sees  storage   battery 91.5% | tank 39.9% | food 14.9% | greywater 100.0%
+                      amounts   energy 274.43 kWh | water 7984.97 L | greywater 500 L
+                      coming in about 36.2 kWh of sun and no rain a day this week
+                      needs     tenants 23.43 kWh, 156.23 L water, 0.67 kg food a day | beds 513.33 L water, 2.14 kWh a day
+                      rules     tenants may use 100% energy, 100% water, 100% food | beds take what they need
+                      food      tomato 2.23 kg (14 days old → rots in 7 days), potato 2.23 kg (14 days old → rots in 7 days)
+                      beds      14 growing: tomato 7, potato 7 | 0 empty | furthest along 71%
+                      allotment nothing held
+                      tenants   fine
   day 1
     building 1
-      WAKE     manager woken on the 3-day check: tank still below 40%
-               sees  storage   battery 89.1% | tank 5.2% | food 42.4% | greywater 100.0%
-                     food      broccoli 42.45 kg (15 days old), lettuce 42.44 kg (15 days old)
-                     beds      14 growing: broccoli 7, lettuce 7 | 0 empty | furthest along 76%
-                     allotment nothing held
-                     tenants   fine
-                     weather   sun 0.46, no rain | spring, week 2
+      WAKE      managers woken on a check: food still below 40%, tank still below 40%
+                sees  storage   battery 89.1% | tank 5.2% | food 0.0% | greywater 100.0%
+                      amounts   energy 267.36 kWh | water 1044.53 L | greywater 500 L
+                      coming in about 28.7 kWh of sun and no rain a day this week
+                      needs     tenants 25.57 kWh, 170.45 L water, 0.73 kg food a day | beds 540.0 L water, 2.14 kWh a day
+                      rules     tenants may use 100% energy, 100% water, 100% food | beds take what they need
+                      food      nothing held
+                      beds      14 growing: broccoli 7, lettuce 7 | 0 empty | furthest along 76%
+                      allotment nothing held
+                      tenants   fine
     building 2
-      WAKE     manager woken on the 3-day check: tank still below 40%
-               sees  storage   battery 91.5% | tank 36.4% | food 44.4% | greywater 100.0%
-                     food      tomato 44.39 kg (15 days old), potato 44.4 kg (15 days old)
-                     beds      14 growing: tomato 7, potato 7 | 0 empty | furthest along 76%
-                     allotment nothing held
-                     tenants   fine
-                     weather   sun 0.58, no rain | spring, week 2
+      WAKE      managers woken on a check: food still below 40%, tank still below 40%
+                sees  storage   battery 91.5% | tank 36.4% | food 12.6% | greywater 100.0%
+                      amounts   energy 274.43 kWh | water 7288.74 L | greywater 500 L
+                      coming in about 36.2 kWh of sun and no rain a day this week
+                      needs     tenants 23.43 kWh, 156.23 L water, 0.67 kg food a day | beds 540.0 L water, 2.14 kWh a day
+                      rules     tenants may use 100% energy, 100% water, 100% food | beds take what they need
+                      food      tomato 1.89 kg (15 days old → rots in 6 days), potato 1.9 kg (15 days old → rots in 6 days)
+                      beds      14 growing: tomato 7, potato 7 | 0 empty | furthest along 76%
+                      allotment nothing held
+                      tenants   fine
   day 4
     building 1
-      WAKE     manager woken on the 3-day check: tank still below 40%
-               sees  storage   battery 90.4% | tank 0.0% | food 41.4% | greywater 100.0%
-                     food      broccoli 41.35 kg (18 days old), lettuce 41.35 kg (18 days old)
-                     beds      14 growing: broccoli 7, lettuce 7 | 0 empty | furthest along 82%
-                     allotment nothing held
-                     tenants   1 days short of water
-                     weather   sun 0.46, no rain | spring, week 2
+      WAKE      managers woken on a check: food still below 40%, tank still below 40%
+                sees  storage   battery 90.4% | tank 0.0% | food 0.0% | greywater 100.0%
+                      amounts   energy 271.23 kWh | water 0.0 L | greywater 500 L
+                      coming in about 28.7 kWh of sun and no rain a day this week
+                      needs     tenants 25.57 kWh, 170.45 L water, 0.73 kg food a day | beds 599.49 L water, 2.14 kWh a day
+                      rules     tenants may use 100% energy, 100% water, 100% food | beds take what they need
+                      food      nothing held
+                      beds      14 growing: broccoli 7, lettuce 7 | 0 empty | furthest along 82% | driest 2 dry days → dies in 5 days
+                      allotment nothing held
+                      tenants   1 days with almost no water → die in 2 days; 3 days with almost no food → die in 18 days
     building 2
-      WAKE     manager woken on the 3-day check: tank still below 40%
-               sees  storage   battery 91.5% | tank 25.2% | food 43.4% | greywater 100.0%
-                     food      tomato 43.39 kg (18 days old), potato 43.39 kg (18 days old)
-                     beds      14 growing: tomato 7, potato 7 | 0 empty | furthest along 90%
-                     allotment nothing held
-                     tenants   fine
-                     weather   sun 0.58, no rain | spring, week 2
+      WAKE      managers woken on a check: food still below 40%, tank still below 40%
+                sees  storage   battery 91.5% | tank 25.2% | food 5.9% | greywater 100.0%
+                      amounts   energy 274.43 kWh | water 5040.05 L | greywater 500 L
+                      coming in about 36.2 kWh of sun and no rain a day this week
+                      needs     tenants 23.43 kWh, 156.23 L water, 0.67 kg food a day | beds 620.0 L water, 2.14 kWh a day
+                      rules     tenants may use 100% energy, 100% water, 100% food | beds take what they need
+                      food      tomato 0.89 kg (18 days old → rots in 3 days), potato 0.89 kg (18 days old → rots in 3 days)
+                      beds      14 growing: tomato 7, potato 7 | 0 empty | furthest along 90%
+                      allotment nothing held
+                      tenants   fine
   day 6
     building 1
-      DEATH    tenants died: no water
+      DEATH     tenants died: no water
   end of week
     Building 1:  empty, tenants gone
-    Building 2:  alive True, energy 274.43, water 3407.59, greywater 500, food {'tomato': 42.72, 'potato': 42.72}, produce {'tomato': 70, 'potato': 70}
+    Building 2:  alive True, energy 274.43, water 3407.59, greywater 500, food {'tomato': 0.22, 'potato': 0.22}, produce {'tomato': 70, 'potato': 70}
       weather:        sun 0.58, rain 0.0
       residents want: energy 164.01, water 1093.61, food 4.69
       residents got:  energy 164.01, water 1093.61, food {'tomato': 2.34, 'potato': 2.35}, greywater 0
@@ -167,46 +239,53 @@ Week 2 (spring)
       harvested:      10 kg potato
       harvested:      10 kg tomato
       harvested:      10 kg potato
-    Shop:        energy 292.86, water 20000, stock {'carrot': 125.0, 'beans': 125.0}
+    Shop:        energy 292.86, water 20000, stock {'tomato': 5, 'carrot': 5, 'potato': 5, 'broccoli': 5, 'beans': 5, 'lettuce': 5}
 
 Week 3 (spring)
   day 0
-    building 2
-      ROTTED   84.48 kg went off
-      ALARM    food dropped below 40% (now 0.0%)
-      WAKE     manager woken by the alarm: food dropped below 40%
-               sees  storage   battery 88.1% | tank 15.9% | food 0.0% | greywater 100.0%
-                     food      nothing held
-                     beds      0 growing:  | 14 empty
-                     allotment tomato 70 kg (1 days old), potato 70 kg (1 days old)
-                     tenants   fine
-                     weather   sun 0.62, no rain | spring, week 3
     shop
-      ROTTED   250.0 kg went off
+      ROTTED    30 kg went off
+    building 2
+      WAKE      managers woken on a check: food still below 40%, tank still below 40%, beds empty
+                sees  storage   battery 88.1% | tank 15.9% | food 0.0% | greywater 100.0%
+                      amounts   energy 264.41 kWh | water 3184.56 L | greywater 500 L
+                      coming in about 38.7 kWh of sun and no rain a day this week
+                      needs     tenants 33.45 kWh, 223.03 L water, 0.96 kg food a day | beds 0 L water, 2.14 kWh a day
+                      rules     tenants may use 100% energy, 100% water, 100% food | beds take what they need
+                      food      nothing held
+                      beds      0 growing | 14 empty
+                      allotment tomato 70 kg (1 days old → rots in 20 days), potato 70 kg (1 days old → rots in 20 days)
+                      tenants   fine
   day 3
     building 2
-      WAKE     manager woken on the 3-day check: food still below 40%, tank still below 40%, beds empty
-               sees  storage   battery 88.1% | tank 12.6% | food 0.0% | greywater 100.0%
-                     food      nothing held
-                     beds      0 growing:  | 14 empty
-                     allotment tomato 70 kg (4 days old), potato 70 kg (4 days old)
-                     tenants   3 days short of food
-                     weather   sun 0.62, no rain | spring, week 3
+      WAKE      managers woken on a check: food still below 40%, tank still below 40%, beds empty
+                sees  storage   battery 88.1% | tank 12.6% | food 0.0% | greywater 100.0%
+                      amounts   energy 264.41 kWh | water 2515.47 L | greywater 500 L
+                      coming in about 38.7 kWh of sun and no rain a day this week
+                      needs     tenants 33.45 kWh, 223.03 L water, 0.96 kg food a day | beds 0 L water, 2.14 kWh a day
+                      rules     tenants may use 100% energy, 100% water, 100% food | beds take what they need
+                      food      nothing held
+                      beds      0 growing | 14 empty
+                      allotment tomato 70 kg (4 days old → rots in 17 days), potato 70 kg (4 days old → rots in 17 days)
+                      tenants   3 days with almost no food → die in 18 days
   day 6
     building 2
-      WAKE     manager woken on the 3-day check: food still below 40%, tank still below 40%, beds empty
-               sees  storage   battery 88.1% | tank 9.2% | food 0.0% | greywater 100.0%
-                     food      nothing held
-                     beds      0 growing:  | 14 empty
-                     allotment tomato 70 kg (7 days old), potato 70 kg (7 days old)
-                     tenants   6 days short of food
-                     weather   sun 0.62, no rain | spring, week 3
+      WAKE      managers woken on a check: food still below 40%, tank still below 40%, beds empty
+                sees  storage   battery 88.1% | tank 9.2% | food 0.0% | greywater 100.0%
+                      amounts   energy 264.41 kWh | water 1846.38 L | greywater 500 L
+                      coming in about 38.7 kWh of sun and no rain a day this week
+                      needs     tenants 33.45 kWh, 223.03 L water, 0.96 kg food a day | beds 0 L water, 2.14 kWh a day
+                      rules     tenants may use 100% energy, 100% water, 100% food | beds take what they need
+                      food      nothing held
+                      beds      0 growing | 14 empty
+                      allotment tomato 70 kg (7 days old → rots in 14 days), potato 70 kg (7 days old → rots in 14 days)
+                      tenants   6 days with almost no food → die in 15 days
   end of week
     Building 1:  empty, tenants gone
     Building 2:  alive True, energy 264.41, water 1846.38, greywater 500, food {}, produce {'tomato': 70, 'potato': 70}
       weather:        sun 0.62, rain 0.0
       residents want: energy 234.15, water 1561.21, food 6.72
-      residents got:  energy 234.15, water 1561.21, food {'tomato': 0.48, 'potato': 0.48}, greywater 0
+      residents got:  energy 234.15, water 1561.21, food {'tomato': 0.22, 'potato': 0.22}, greywater 0
       beds want:      water 0, energy 14.98
       beds got:       energy 14.98, water 0, food {}, greywater 0
     Shop:        energy 292.86, water 20000, stock {}
@@ -214,22 +293,28 @@ Week 3 (spring)
 Week 4 (spring)
   day 2
     building 2
-      WAKE     manager woken on the 3-day check: food still below 40%, tank still below 40%, beds empty
-               sees  storage   battery 67.5% | tank 5.5% | food 0.0% | greywater 100.0%
-                     food      nothing held
-                     beds      0 growing:  | 14 empty
-                     allotment tomato 70 kg (10 days old), potato 70 kg (10 days old)
-                     tenants   9 days short of food
-                     weather   sun 0.3, no rain | spring, week 4
+      WAKE      managers woken on a check: food still below 40%, tank still below 40%, beds empty
+                sees  storage   battery 67.5% | tank 5.5% | food 0.0% | greywater 100.0%
+                      amounts   energy 202.58 kWh | water 1096.98 L | greywater 500 L
+                      coming in about 18.7 kWh of sun and no rain a day this week
+                      needs     tenants 37.47 kWh, 249.8 L water, 1.07 kg food a day | beds 0 L water, 2.14 kWh a day
+                      rules     tenants may use 100% energy, 100% water, 100% food | beds take what they need
+                      food      nothing held
+                      beds      0 growing | 14 empty
+                      allotment tomato 70 kg (10 days old → rots in 11 days), potato 70 kg (10 days old → rots in 11 days)
+                      tenants   9 days with almost no food → die in 12 days
   day 5
     building 2
-      WAKE     manager woken on the 3-day check: food still below 40%, tank still below 40%, beds empty
-               sees  storage   battery 46.9% | tank 1.7% | food 0.0% | greywater 100.0%
-                     food      nothing held
-                     beds      0 growing:  | 14 empty
-                     allotment tomato 70 kg (13 days old), potato 70 kg (13 days old)
-                     tenants   12 days short of food
-                     weather   sun 0.3, no rain | spring, week 4
+      WAKE      managers woken on a check: food still below 40%, tank still below 40%, beds empty
+                sees  storage   battery 46.9% | tank 1.7% | food 0.0% | greywater 100.0%
+                      amounts   energy 140.75 kWh | water 347.58 L | greywater 500 L
+                      coming in about 18.7 kWh of sun and no rain a day this week
+                      needs     tenants 37.47 kWh, 249.8 L water, 1.07 kg food a day | beds 0 L water, 2.14 kWh a day
+                      rules     tenants may use 100% energy, 100% water, 100% food | beds take what they need
+                      food      nothing held
+                      beds      0 growing | 14 empty
+                      allotment tomato 70 kg (13 days old → rots in 8 days), potato 70 kg (13 days old → rots in 8 days)
+                      tenants   12 days with almost no food → die in 9 days
   end of week
     Building 1:  empty, tenants gone
     Building 2:  alive True, energy 120.14, water 97.78, greywater 500, food {}, produce {'tomato': 70, 'potato': 70}
@@ -243,16 +328,19 @@ Week 4 (spring)
 Week 5 (spring)
   day 1
     building 2
-      WAKE     manager woken on the 3-day check: food still below 40%, tank still below 40%, beds empty
-               sees  storage   battery 53.4% | tank 0.0% | food 0.0% | greywater 100.0%
-                     food      nothing held
-                     beds      0 growing:  | 14 empty
-                     allotment tomato 70 kg (16 days old), potato 70 kg (16 days old)
-                     tenants   2 days short of water, 15 days short of food
-                     weather   sun 0.73, no rain | spring, week 5
-  day 2
+      WAKE      managers woken on a check: food still below 40%, tank still below 40%, beds empty
+                sees  storage   battery 53.4% | tank 0.0% | food 0.0% | greywater 100.0%
+                      amounts   energy 160.12 kWh | water 0.0 L | greywater 500 L
+                      coming in about 45.6 kWh of sun and no rain a day this week
+                      needs     tenants 23.87 kWh, 159.16 L water, 0.68 kg food a day | beds 0 L water, 2.14 kWh a day
+                      rules     tenants may use 100% energy, 100% water, 100% food | beds take what they need
+                      food      nothing held
+                      beds      0 growing | 14 empty
+                      allotment tomato 70 kg (16 days old → rots in 5 days), potato 70 kg (16 days old → rots in 5 days)
+                      tenants   1 days with almost no water → die in 2 days; 15 days with almost no food → die in 6 days
+  day 3
     building 2
-      DEATH    tenants died: no water
+      DEATH     tenants died: no water
   end of week
     Building 1:  empty, tenants gone
     Building 2:  empty, tenants gone

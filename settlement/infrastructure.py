@@ -26,6 +26,9 @@ class Infrastructure:
         # - storages already below the alarm line, so they ring once, not every day
         self.low = set()
 
+        # - the day this place is next due its routine check; an agent can bring it forward
+        self.next_check = 0
+
     def collect(self, weather, fraction=1.0):
         # - sun and rain go into storage, a fraction of the week's at a time
         # - anything above capacity is lost

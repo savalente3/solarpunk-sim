@@ -104,7 +104,8 @@ class Produce:
         for lot in self.lots:
             crop = lot["crop"]
             if crop not in summary:
-                summary[crop] = {"kg": 0, "oldest_days": today - lot["picked"]}
+                age = today - lot["picked"]
+                summary[crop] = {"kg": 0, "oldest_days": age, "rots_in": self.shelf_days - age}
             summary[crop]["kg"] = round(summary[crop]["kg"] + lot["kg"], 2)
         return summary
 
