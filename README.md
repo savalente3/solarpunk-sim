@@ -19,53 +19,73 @@ agents, so building 1 against building 2 is a model comparison.
 conda env create -f environment.yml
 conda activate solarpunk-sim
 
-cp .env.example .env    # then fill in NVIDIA_API_KEY and GOOGLE_API_KEY
+ollama pull gpt-oss:20b
+ollama pull gemma4:26b
+ollama pull nemotron-3.5-lightning
+
+cp .env.example .env    # optional: a LangSmith key, to trace every model call
 ```
 
-Keys: [build.nvidia.com](https://build.nvidia.com) (free credits, no card) and
-[aistudio.google.com/apikey](https://aistudio.google.com/apikey) (free tier).
+The three models run locally through [Ollama](https://ollama.com) -- keep
+`ollama serve` running -- so no API key is needed. A LangSmith key from
+[smith.langchain.com](https://smith.langchain.com) with `LANGSMITH_TRACING=true`
+shows every model call, with its prompt and answer, on LangSmith's website.
 
 ## Run
 
 ```bash
-python main.py --seed 0 --condition baseline
+python main.py --seed 0 --condition no-memory
 ```
 
-Runs one year -- four seasons of twelve weekly ticks -- and prints every week:
-each building's storage, weather, what the residents and the beds asked for and
-got, and anything harvested, then the shop. The same run is written to
-`data/seed-0-baseline.jsonl`: a `_meta` line (seed, condition, date, model
-names, opening crops), then one line per week, flushed as it goes. The same
-seed always gives the same weather and the same opening crops.
+Runs one year -- four seasons of twelve weekly ticks -- printing one line a
+week, and serves a live view of the settlement: open the address it prints to
+watch every wake, answer, trade and death the moment it happens (`live.py`).
+The run is written to `data/version3/seed-0-no-memory.jsonl`: a `_meta` line
+(version, seed, condition, date, model names, opening crops), then one line per
+week, flushed as it goes -- plus a `.csv` for graphs and a `.txt` to read. The
+same seed always gives the same weather and the same opening crops.
+
+`--condition` is `no-memory` or `memory`: in a memory run each building manager
+is also shown the community board, everything that has happened in the
+settlement so far.
+
+If a model stops answering, the run pauses with every finished week on disk.
+Run the same command with `--resume` to carry on: the weeks already on file are
+run again with the answers they recorded -- in seconds, and exactly as before --
+and the models take over from the week it paused in.
 
 ## Layout
 
 ```
-agents/       the agents, and the model config they are built from
-settlement/   weather, infrastructure, buildings, allotments, the shop, the week
-data/         one JSONL file per run
-main.py       entry point
+agents/       the agents, their instructions and answer shapes, and the model config
+settlement/   weather, infrastructure, buildings, allotments, produce, the shop, the week
+data/         one folder per design version, three files per run
+main.py       entry point: runs a year and records it
+live.py       the live view: serves the visualisation and streams the run to it
+evaluation.py measures every finished run, compares them seed by seed, draws the graphs
 NOTES.md      design decisions, sources and limitations, for the report
 ```
 
-## What actually runs
+The visualisation itself (`visualisation/`) is kept local and is not part of
+the repository.
 
-Each week, for each building:
+## What happens in a run
 
-- weather is drawn for the season, and the roof collects sun and rain into
-  the battery and the rainwater tank
-- the residents take their energy, water and food; a third of the water they
-  use comes back into the greywater tank
-- the beds take the water and power they need -- none on a week with rain
-- the beds grow, slower when short of water or power, and ripe beds are
-  harvested into the allotment's own storage
+Each week one sky is drawn for the season over the whole settlement, and each
+day:
 
-and the shop collects its own weather and runs itself on its panels.
+- every roof collects sun and rain into its battery and rainwater tank
+- the tenants use their share of energy, water and food; a third of the water
+  they use comes back as greywater
+- the beds take what the building manager gives them, grow, and ripe beds are
+  picked into the allotment's store; produce older than three weeks rots
+- a storage falling below 40% wakes its managers at once; otherwise they are
+  checked every few days, or when they asked to be
 
-Energy and water move between storages through `receive` and `spend`; produce,
-held lot by lot and ageing, through `move()`. Those doors are what the agents
-will use -- the agents themselves make no decisions yet, and nothing moves
-between the buildings, the allotments and the shop.
-
-Known: NVIDIA's free tier is shared capacity and drops requests under load, so
-the season loop will need to survive a failed call rather than crash.
+When a building wakes, its allotment manager says what the beds need and what
+to plant, and its building manager decides: the tenants' shares, the beds'
+supply, what to move into food storage, what to plant, and what to send to or
+ask of the shop, whose agent answers there and then. Tenants die after three
+days with almost no water or three weeks with almost no food, and the building
+stops. A model that cannot be reached pauses the run with every finished week
+on disk. The design decisions behind all of this are in NOTES.md.

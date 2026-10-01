@@ -48,19 +48,22 @@ class Building(Infrastructure):
         # - what the tenants and the beds needed today, a day's worth each
         self.need_today = None
 
-        # - the food storage starts half full, split across the crops the roof grows,
-        #   and ages from the day the run starts
+        # - the food storage starts half full, split across the building's two opening
+        #   crops, and ages from the day the run starts
         self.food = Produce(self.food_storage)
         opening = []
+        
         for crop in crops:
             opening.append({"crop": crop, "kg": round(self.food_storage / 2 / len(crops), 2), "picked": 0})
+        
         self.food.take(opening)
 
         self.greywater = self.greywater_tank // 2
 
         # - beds take what the panels leave
-        self.allotment = Allotment(self.roof_area - self.panel_area, crops)
-        # - the building's two agents, handed in; none means a baseline run
+        self.allotment = Allotment(self.roof_area - self.panel_area)
+        
+        # - the building's two agents, handed in; none means no one manages it
         self.managers = managers
 
     def needs(self, rate, fraction=1.0):
@@ -103,6 +106,7 @@ class Building(Infrastructure):
         # - the roof's storage, and the food storage
         levels = super().levels()
         levels["food"] = self.food.total() / self.food_storage
+        
         return levels
 
     def spend(self, energy=0, water=0, food=0, greywater=0):
@@ -117,6 +121,7 @@ class Building(Infrastructure):
 
         given["food"] = eaten
         given["greywater"] = greywater_given
+        
         return given
 
     def recover(self, water_used):
@@ -127,14 +132,17 @@ class Building(Infrastructure):
     def snapshot(self, today):
         # - what the building looks like right now: what its manager is shown
         levels = {}
+        
         for storage, level in self.levels().items():
             levels[storage] = round(level * 100, 1)
+        
         levels["greywater"] = round(self.greywater / self.greywater_tank * 100, 1)
 
         # - how long the tenants have gone short, and how long they have left
         tenants = {"days_without_water": self.days_without_water, "days_without_food": self.days_without_food}
         if self.days_without_water:
             tenants["water_dies_in"] = self.thirst_limit - self.days_without_water
+        
         if self.days_without_food:
             tenants["food_dies_in"] = self.hunger_limit - self.days_without_food
 
@@ -158,16 +166,36 @@ class Building(Infrastructure):
         # - says what could not be done, and why, so the manager is told next time
         refused = []
 
+        # - asking to move nothing, or plant no beds, is not refused -- just skipped
         for request in decision["now"]["move_to_food_storage"]:
+            
+            if request["kg"] == 0:
+                continue
+
+            held = self.allotment.produce.kinds().get(request["crop"], 0)
+            room = self.food.free_storage()
             moved = move(self.allotment.produce, self.food, request["crop"], request["kg"])
+
+            # - say which limit stopped it, so the manager can learn from it
             if moved < request["kg"]:
-                refused.append(
-                    f"move {request['kg']} kg {request['crop']} into food storage: "
-                    f"only {moved} kg moved (not that much held, or no room)"
-                )
+                if held == 0:
+                    reason = f"the allotment's store holds no {request['crop']}"
+                elif room == 0:
+                    reason = "food storage is full"
+                elif held < room:
+                    reason = f"the allotment's store only held {held} kg of it"
+                else:
+                    reason = f"food storage only had room for {room} kg"
+                
+                refused.append(f"move {request['kg']} kg {request['crop']} into food storage: {reason} ({moved} kg moved)")
 
         for planting in decision["now"]["plant"]:
+            
+            if planting["beds"] == 0:
+                continue
+            
             planted = 0
+            
             for index in self.allotment.bare():
                 if planted == planting["beds"] or not self.allotment.plant(index, planting["crop"]):
                     break
@@ -184,6 +212,7 @@ class Building(Infrastructure):
         self.allowance = {"energy": tenants["energy"], "water": tenants["water"], "food": tenants["food"]}
 
         beds = decision["until_next_time"]["beds"]
+        
         self.bed_supply = {
             "water": beds["water_per_day"],
             "greywater": beds["greywater_per_day"],

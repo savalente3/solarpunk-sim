@@ -6,6 +6,11 @@ holds it hand over what is nearest to going off first.
 """
 
 
+def picked_on(lot):
+    # - the day a lot was picked, which orders lots oldest first
+    return lot["picked"]
+
+
 class Produce:
     # - how long a picked crop keeps before it rots, the same for every crop
     shelf_days = 21
@@ -47,7 +52,7 @@ class Produce:
             self.lots.append({"crop": lot["crop"], "kg": kg, "picked": lot["picked"]})
             taken.append({"crop": lot["crop"], "kg": kg, "picked": lot["picked"]})
 
-        self.lots.sort(key=lambda lot: lot["picked"])
+        self.lots.sort(key=picked_on)
         return taken
 
     def give(self, crop, kg):

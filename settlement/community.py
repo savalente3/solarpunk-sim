@@ -3,6 +3,7 @@
 The buildings grow and consume, the shop moves produce between them. This is
 what holds them together, and what runs the days and the weeks.
 """
+from settlement.produce import move
 from settlement.weather import Weather
 
 
@@ -13,6 +14,14 @@ def add(total, amounts):
             add(total.setdefault(key, {}), value)
         else:
             total[key] = round(total.get(key, 0) + value, 2)
+
+
+def weight(lots):
+    # - kg across a list of lots
+    total = 0
+    for lot in lots:
+        total += lot["kg"]
+    return total
 
 
 class Community:
@@ -33,15 +42,37 @@ class Community:
         self.buildings = buildings
         self.shop = shop
 
+        # - whoever is watching the run live, handed in; none means nobody is
+        self.listener = None
+
+        # - every finished week, and -- in the memory condition -- what writes them
+        #   up as the community board the building managers are shown; handed in,
+        #   and none means the managers remember nothing
+        self.history = []
+        self.remember = None
+
+    def tell(self, kind, what):
+        # - let whoever is watching know, the moment it happens
+        if self.listener is not None:
+            self.listener(kind, what)
+
+    def happened(self, events, event):
+        # - record what happened, and tell whoever is watching straight away
+        events.append(event)
+        self.tell("event", event)
+
     def run_week(self, week, season, rng):
-        # - weather and needs are drawn for the week for every building, alive or
-        #   not, so every condition sees the same weather on the same seed
-        skies = {}
+        # - one sky over the whole settlement: the buildings and the shop stand side
+        #   by side, so they share the week's weather
+        # - the tenants' needs are drawn for every building, alive or not, so every
+        #   condition sees the same draws on the same seed
+        sky = Weather(rng, season)
+        skies = {"shop": sky}
         rates = {}
         for building in self.buildings:
-            skies[building.name] = Weather(rng, season)
+            skies[building.name] = sky
             rates[building.name] = 1 + rng.uniform(-self.variation, self.variation)
-        skies["shop"] = Weather(rng, season)
+        self.tell("week", {"week": week, "season": season, "weather": sky.intensity})
 
         wanted = {}
         given = {}
@@ -59,6 +90,8 @@ class Community:
         states = []
 
         for day in range(self.days):
+            self.tell("day begins", {"week": week, "day": day})
+
             for building in self.buildings:
                 if not building.alive:
                     continue
@@ -76,20 +109,20 @@ class Community:
                 rotted[building.name].extend(spoiled)
 
                 if spoiled:
-                    kg = round(sum(lot["kg"] for lot in spoiled), 2)
-                    events.append({"day": day, "place": building.name, "event": "rotted", "lost": f"{kg} kg"})
+                    kg = round(weight(spoiled), 2)
+                    self.happened(events, {"day": day, "place": building.name, "event": "rotted", "lost": f"{kg} kg"})
 
                 for bed in died:
-                    events.append({"day": day, "place": building.name, "event": "bed died", "lost": f"{bed['kg']} kg {bed['crop']}"})
+                    self.happened(events, {"day": day, "place": building.name, "event": "bed died", "lost": f"{bed['kg']} kg {bed['crop']}"})
 
                 cause = building.survive(residents_want, residents_got)
                 if cause:
-                    events.append({"day": day, "place": building.name, "event": "tenants died", "cause": cause})
+                    self.happened(events, {"day": day, "place": building.name, "event": "tenants died", "cause": cause})
                     continue
 
                 for storage in self.fallen(building):
                     level = round(building.levels()[storage] * 100, 1)
-                    events.append({"day": day, "place": building.name, "event": "alarm", "storage": storage, "level": level})
+                    self.happened(events, {"day": day, "place": building.name, "event": "alarm", "storage": storage, "level": level})
 
             # - the shop catches its own weather and runs itself on it
             # - it needs no water, so what it catches waits to be given
@@ -99,12 +132,12 @@ class Community:
             spoiled = self.shop.stock.rot(week * self.days + day)
             rotted["shop"].extend(spoiled)
             if spoiled:
-                kg = round(sum(lot["kg"] for lot in spoiled), 2)
-                events.append({"day": day, "place": "shop", "event": "rotted", "lost": f"{kg} kg"})
+                kg = round(weight(spoiled), 2)
+                self.happened(events, {"day": day, "place": "shop", "event": "rotted", "lost": f"{kg} kg"})
 
             for storage in self.fallen(self.shop):
                 level = round(self.shop.levels()[storage] * 100, 1)
-                events.append({"day": day, "place": "shop", "event": "alarm", "storage": storage, "level": level})
+                self.happened(events, {"day": day, "place": "shop", "event": "alarm", "storage": storage, "level": level})
 
             today = week * self.days + day
             self.wake(today, day, season, skies, events)
@@ -116,6 +149,7 @@ class Community:
                 state[building.name] = building.snapshot(today)
             state["shop"] = self.shop.snapshot(today)
             states.append(state)
+            self.tell("day ends", {"week": week, "day": day, "state": state})
 
         weather = {}
         for name, sky in skies.items():
@@ -132,7 +166,7 @@ class Community:
                 "produce": building.allotment.produce.kinds(),
             }
 
-        return {
+        record = {
             "week": week,
             "season": season,
             "weather": weather,
@@ -150,6 +184,8 @@ class Community:
             "events": events,
             "days": states,
         }
+        self.history.append(record)
+        return record
 
     def run_day(self, building, weather, rate, today):
         # - a seventh of the week: collect, the residents and the beds take
@@ -257,7 +293,12 @@ class Community:
                     },
                 }
                 sees.update(place.snapshot(day_of_year))
-                events.append({"day": day, "place": name, "event": "wake", "trigger": trigger, "why": reasons, "sees": sees})
+
+                # - a building also sees what the shop holds, so it knows what it could ask for
+                if name != "shop":
+                    sees["shop"] = {"water": round(self.shop.water, 2), "stock": self.shop.stock.summary(day_of_year)}
+
+                self.happened(events, {"day": day, "place": name, "event": "wake", "trigger": trigger, "why": reasons, "sees": sees})
 
                 if name != "shop" and place.managers is not None:
                     self.consult(place, sees, reasons, day_of_year, day, events)
@@ -266,19 +307,89 @@ class Community:
         # - the allotment manager says what the beds need, the building manager
         #   decides, and the building carries it out
         # - an answer that cannot be read changes nothing: the last decision stays
-        exchanges, decision = building.managers.decide(sees, why)
-        for exchange in exchanges:
+        # - each answer is recorded, and told to whoever is watching, as soon as it is given
+        def said(exchange):
             record = {"day": day, "place": building.name, "event": "exchange"}
             record.update(exchange)
-            events.append(record)
+            self.happened(events, record)
+
+        # - in the memory condition the building manager is also shown the community board
+        board = None
+        if self.remember is not None:
+            board = self.remember(self.history, events)
+
+        decision = building.managers.decide(sees, why, said, board)
 
         if decision is None:
             refused = ["your last answer could not be read, so your previous decision stayed in force"]
         else:
             refused = building.apply(decision, day_of_year)
+            refused.extend(self.trade(building, decision["shop"], sees, day_of_year, day, events))
 
-        events.append({"day": day, "place": building.name, "event": "decision", "refused": refused})
+        self.happened(events, {"day": day, "place": building.name, "event": "decision", "refused": refused})
         building.managers.refused = refused
+
+    def trade(self, building, request, sees, today, day, events):
+        # - the building sends the shop its surplus, and the shop answers what it
+        #   was asked -- the shop is only called if the building wants something
+        # - says what could not be done, for the building manager next time
+        refused = []
+
+        sent = []
+        for item in request["send_surplus"]:
+            if item["kg"] == 0:
+                continue
+            kg = move(building.allotment.produce, self.shop.stock, item["crop"], item["kg"])
+            if kg > 0:
+                sent.append({"crop": item["crop"], "kg": kg})
+            if kg < item["kg"]:
+                refused.append(
+                    f"send {item['kg']} kg {item['crop']} to the shop: only {kg} kg sent "
+                    f"(not that much in the allotment's store, or the shop is full)"
+                )
+
+        wants = request["water_wanted"] > 0 or bool(request["message"].strip())
+        for item in request["produce_wanted"]:
+            if item["kg"] > 0:
+                wants = True
+
+        if not (sent or wants):
+            return refused
+
+        water = 0
+        given = []
+
+        if self.shop.manager is not None:
+            # - the shop is shown the moment, itself, and how both buildings stand
+            shop_sees = {"week": sees["week"], "day": sees["day"], "season": sees["season"]}
+            shop_sees.update(self.shop.snapshot(today))
+            shop_sees["buildings"] = {}
+            for other in self.buildings:
+                shop_sees["buildings"][other.name] = other.snapshot(today)
+
+            reply, exchange = self.shop.manager.answer(shop_sees, building.name, request, sent)
+            record = {"day": day, "place": building.name, "event": "exchange"}
+            record.update(exchange)
+            self.happened(events, record)
+            building.managers.shop_reply = reply
+
+            if reply is None:
+                refused.append("the shop's answer could not be read, so it gave nothing")
+            else:
+                if reply["water_given"] > 0:
+                    taken = building.receive(water=min(reply["water_given"], self.shop.water))
+                    self.shop.spend(water=taken["water"])
+                    water = round(taken["water"], 2)
+
+                for item in reply["produce_given"]:
+                    if item["kg"] == 0:
+                        continue
+                    kg = move(self.shop.stock, building.food, item["crop"], item["kg"])
+                    if kg > 0:
+                        given.append({"crop": item["crop"], "kg": kg})
+
+        self.happened(events, {"day": day, "place": building.name, "event": "trade", "sent": sent, "water": water, "produce": given})
+        return refused
 
     def run_season(self, name, first_week, rng):
         # - twelve weeks under the same season, handed back one at a time
@@ -291,5 +402,7 @@ class Community:
             yield from self.run_season(name, index * self.season_weeks, rng)
 
     def __repr__(self):
-        names = ", ".join(building.name for building in self.buildings)
-        return f"Community(buildings=[{names}], shop={self.shop!r})"
+        names = []
+        for building in self.buildings:
+            names.append(building.name)
+        return f"Community(buildings=[{', '.join(names)}], shop={self.shop!r})"

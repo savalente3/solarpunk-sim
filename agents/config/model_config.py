@@ -1,58 +1,59 @@
-"""Model configs for init_chat_model, and the env var each key comes from.
+"""Model configs for init_chat_model: the three models the settlement runs on.
 
-All three providers are OpenAI-compatible
-model_provider is "openai" and only base_url changes. 
-Keys are located in .env - api_key_env names the variable.
+All three run on this machine through Ollama's OpenAI-compatible endpoint, so
+model_provider is "openai" and none needs a key (api_key_env is None; a
+profile for a hosted model would name the .env variable holding its key).
+The models never leave the computer (LangSmith tracing, if
+switched on in .env, still copies each prompt and answer to LangSmith).
+`structured` is how the answer shape is held -- some models manage it as a
+tool call, others only when it is enforced as they write. `reasoning_effort`
+keeps thinking to a minimum: "none" switches it off for Gemma and Nemotron,
+and "low" is the least gpt-oss allows -- it cannot switch reasoning off.
+`max_tokens` caps each answer, the same for every model: above all but the
+rarest long answer, but a model caught in a loop stops within a few minutes
+instead of writing until the request times out and the run pauses.
 """
 import os
 
 from dotenv import load_dotenv
 
 model_configs = {
-    "nemotron_super": {
-        "model": "nvidia/nemotron-3-super-120b-a12b",
+    # - local, through Ollama: building 1, building 2 and the shop
+    "gpt_oss_local": {
+        "model": "gpt-oss:20b",
         "model_provider": "openai",
-        "base_url": "https://integrate.api.nvidia.com/v1",
-        "api_key_env": "NVIDIA_API_KEY",
+        "base_url": "http://localhost:11434/v1",
+        "api_key_env": None,
         "temperature": 0.0,
-        "timeout": 30,
+        "timeout": 600,
         "max_retries": 2,
+        "max_tokens": 8192,
+        "structured": "json_schema",
+        "reasoning_effort": "low",
     },
-    "nemotron_reasoning": {
-        "model": "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning",
+    "gemma_local": {
+        "model": "gemma4:26b",
         "model_provider": "openai",
-        "base_url": "https://integrate.api.nvidia.com/v1",
-        "api_key_env": "NVIDIA_API_KEY",
+        "base_url": "http://localhost:11434/v1",
+        "api_key_env": None,
         "temperature": 0.0,
-        "timeout": 30,
+        "timeout": 600,
         "max_retries": 2,
+        "max_tokens": 8192,
+        "structured": "json_schema",
+        "reasoning_effort": "none",
     },
-    "mistral_nemotron": {
-        "model": "mistralai/mistral-nemotron",
+    "nemotron_local": {
+        "model": "nemotron-3.5-lightning",
         "model_provider": "openai",
-        "base_url": "https://integrate.api.nvidia.com/v1",
-        "api_key_env": "NVIDIA_API_KEY",
+        "base_url": "http://localhost:11434/v1",
+        "api_key_env": None,
         "temperature": 0.0,
-        "timeout": 30,
+        "timeout": 600,
         "max_retries": 2,
-    },
-    "gpt_oss": {
-        "model": "openai/gpt-oss-20b",
-        "model_provider": "openai",
-        "base_url": "https://integrate.api.nvidia.com/v1",
-        "api_key_env": "NVIDIA_API_KEY",
-        "temperature": 0.0,
-        "timeout": 30,
-        "max_retries": 2,
-    },
-    "gemini": {
-        "model": "gemini-3.6-flash",
-        "model_provider": "openai",
-        "base_url": "https://generativelanguage.googleapis.com/v1beta/openai/",
-        "api_key_env": "GOOGLE_API_KEY",
-        "temperature": 0.0,
-        "timeout": 30,
-        "max_retries": 2,
+        "max_tokens": 8192,
+        "structured": "json_schema",
+        "reasoning_effort": "none",
     },
 }
 
@@ -64,8 +65,13 @@ def load_models():
     for name, config in model_configs.items():
         config = dict(config)
         key = config.pop("api_key_env")
-        if not os.environ.get(key):
-            continue        # no key for this provider, so skip it
-        config["api_key"] = os.environ[key]
+        # - a local model needs no key, but the client wants one; a hosted
+        #   model without its key in .env is skipped
+        if key is None:
+            config["api_key"] = "local"
+        elif not os.environ.get(key):
+            continue
+        else:
+            config["api_key"] = os.environ[key]
         models[name] = config
     return models

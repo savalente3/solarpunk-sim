@@ -4,11 +4,12 @@ The allotment keeps what it harvests. The water and the power come out of the
 building, and the allotment trades its produce for them -- which is what the
 two managers have to agree on.
 """
+from settlement.infrastructure import Infrastructure
 from settlement.produce import Produce
 
 
 class Allotment:
-    # - every crop grows and drinks the same, only the name differs
+    # - every crop drinks and yields the same; they differ in how long they take to ripen
     crops = ("tomato", "carrot", "potato", "broccoli", "beans", "lettuce")
 
     # - one bed holds one crop, and a roof grows a few kinds at most at once
@@ -20,8 +21,9 @@ class Allotment:
     energy_rate = 15        # kWh a week to run the allotment's automation
     seed_thirst = 0.2   # share a bare bed drinks against a ripe one
 
-    # - the cycle
-    growth_weeks = 3        # weeks from seed to ripe
+    # - the cycle: weeks from seed to ripe, fastest first, in the order real
+    #   crops ripen but compressed to fit a 48-week year
+    growth_weeks = {"lettuce": 2, "beans": 2, "carrot": 3, "broccoli": 3, "tomato": 4, "potato": 4}
     crop_yield = 1          # kg per square metre
 
     # - a bed getting less than this share of what it needs is having a dry day,
@@ -29,27 +31,28 @@ class Allotment:
     dry_share = 0.5
     wilt_days = 7
 
-    def __init__(self, area, crops):
+    def __init__(self, area):
+        # - the roof opens bare, in early spring: what to plant, and when, is the
+        #   managers' call from the first day
         self.area = area
         self.beds = [None] * (area // self.bed_area)
         self.produce = Produce()
 
-        # - the roof starts worked, the building's crops alternating across the beds
-        for index in range(len(self.beds)):
-            self.plant(index, crops[index % len(crops)])
-
     def needs(self, weather, fraction=1.0):
-        # - rain waters the beds
         # - thirst grows with the crop
+        # - the rain that falls on a bed counts towards what it needs, and the
+        #   building tops up the rest; a wet enough week needs nothing
         # - the allotment runs either way
         # - the fraction is how much of the week
 
+        rained = weather.intensity["rain"] * Infrastructure.rain_yield
         water = 0
-        if weather.intensity["rain"] == 0:
-            for bed in self.beds:
-                if bed is not None:
-                    share = self.seed_thirst + (1 - self.seed_thirst) * bed["maturity"]
-                    water += self.bed_area * self.irrigation_rate * share * fraction
+        
+        for bed in self.beds:
+            if bed is not None:
+                share = self.seed_thirst + (1 - self.seed_thirst) * bed["maturity"]
+                short = max(0, self.irrigation_rate * share - rained)
+                water += self.bed_area * short * fraction
 
         return {"water": round(water, 2), "energy": round(self.energy_rate * fraction, 2)}
 
@@ -59,12 +62,14 @@ class Allotment:
         #   limit, is refused
 
         growing = set()
+        
         for bed in self.beds:
             if bed is not None:
                 growing.add(bed["crop"])
 
         if crop not in self.crops:
             return False
+        
         if crop not in growing and len(growing) >= self.crop_limit:
             return False
 
@@ -98,7 +103,7 @@ class Allotment:
                 self.beds[index] = None
                 continue
 
-            bed["maturity"] = min(1.0, bed["maturity"] + share * fraction / self.growth_weeks)
+            bed["maturity"] = min(1.0, bed["maturity"] + share * fraction / self.growth_weeks[bed["crop"]])
 
         return died
 
@@ -109,10 +114,13 @@ class Allotment:
         beds = []
         furthest = None
         driest = 0
+        
         for bed in self.beds:
+            
             if bed is None:
                 beds.append(None)
                 continue
+            
             growing[bed["crop"]] = growing.get(bed["crop"], 0) + 1
             beds.append({"crop": bed["crop"], "grown": round(bed["maturity"] * 100), "dry_days": bed["dry"]})
             furthest = max(furthest or 0, round(bed["maturity"] * 100))
