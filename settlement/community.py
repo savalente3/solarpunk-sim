@@ -3,6 +3,8 @@
 The buildings grow and consume, the shop moves produce between them. This is
 what holds them together, and what runs the days and the weeks.
 """
+from functools import partial
+
 from settlement.produce import move
 from settlement.weather import Weather
 
@@ -19,8 +21,10 @@ def add(total, amounts):
 def weight(lots):
     # - kg across a list of lots
     total = 0
+
     for lot in lots:
         total += lot["kg"]
+    
     return total
 
 
@@ -69,9 +73,11 @@ class Community:
         sky = Weather(rng, season)
         skies = {"shop": sky}
         rates = {}
+        
         for building in self.buildings:
             skies[building.name] = sky
             rates[building.name] = 1 + rng.uniform(-self.variation, self.variation)
+        
         self.tell("week", {"week": week, "season": season, "weather": sky.intensity})
 
         wanted = {}
@@ -79,9 +85,11 @@ class Community:
         picked = {}
         lost = {}
         rotted = {"shop": []}
+        
         for building in self.buildings:
             wanted[building.name] = {"residents": {}, "beds": {}}
             given[building.name] = {"residents": {}, "beds": {}}
+            
             picked[building.name] = []
             lost[building.name] = []
             rotted[building.name] = []
@@ -104,6 +112,7 @@ class Community:
                 add(given[building.name]["residents"], residents_got)
                 add(wanted[building.name]["beds"], beds_want)
                 add(given[building.name]["beds"], beds_got)
+                
                 picked[building.name].extend(harvested)
                 lost[building.name].extend(died)
                 rotted[building.name].extend(spoiled)
@@ -131,6 +140,7 @@ class Community:
 
             spoiled = self.shop.stock.rot(week * self.days + day)
             rotted["shop"].extend(spoiled)
+            
             if spoiled:
                 kg = round(weight(spoiled), 2)
                 self.happened(events, {"day": day, "place": "shop", "event": "rotted", "lost": f"{kg} kg"})
@@ -145,17 +155,22 @@ class Community:
             # - how everything stands at the end of the day, for following the
             #   lead-up to a decision afterwards
             state = {"day": day}
+            
             for building in self.buildings:
                 state[building.name] = building.snapshot(today)
+            
             state["shop"] = self.shop.snapshot(today)
             states.append(state)
+            
             self.tell("day ends", {"week": week, "day": day, "state": state})
 
         weather = {}
+        
         for name, sky in skies.items():
             weather[name] = sky.intensity
 
         tanks = {}
+        
         for building in self.buildings:
             tanks[building.name] = {
                 "alive": building.alive,
@@ -184,6 +199,7 @@ class Community:
             "events": events,
             "days": states,
         }
+
         self.history.append(record)
         return record
 
@@ -196,6 +212,7 @@ class Community:
         # - the tenants use what the manager allows of what they need
         residents_want = building.needs(rate, fraction)
         allowed = {}
+
         for resource, amount in residents_want.items():
             allowed[resource] = round(amount * building.allowance[resource], 2)
 
@@ -205,6 +222,7 @@ class Community:
         # - the beds get what the manager gives them each day -- greywater first,
         #   and never more than they can use; with no decision yet they take what they need
         beds_want = building.allotment.needs(weather, fraction)
+        
         if building.bed_supply is None:
             beds_ask = beds_want
         else:
@@ -222,6 +240,7 @@ class Community:
 
         # - ripe beds are picked into the allotment's own storage
         harvested = []
+
         for index in building.allotment.ripe():
             harvested.append(building.allotment.harvest(index, today))
 
@@ -235,6 +254,7 @@ class Community:
         dropped = []
 
         for storage, level in place.levels().items():
+            
             if level < self.alarm_level and storage not in place.low:
                 place.low.add(storage)
                 dropped.append(storage)
@@ -246,12 +266,14 @@ class Community:
     def wake(self, day_of_year, day, season, skies, events):
         # - who has something to decide today, and why -- no reason, no call
         # - an alarm wakes a place at once; otherwise it is checked every few days,
-        #   or when its manager asked to be
-        # - a building run by agents is consulted there and then
+        #   or when it manager asked to be
+        # - a building run by agnts is consulted there and then
         line = round(self.alarm_level * 100)
 
         places = []
+
         for building in self.buildings:
+            
             if building.alive:
                 places.append((building.name, building))
         places.append(("shop", self.shop))
@@ -263,16 +285,20 @@ class Community:
 
             reasons = []
             trigger = "alarm"
+            
             for event in events:
                 if event["day"] == day and event["place"] == name and event["event"] == "alarm":
                     reasons.append(f"{event['storage']} dropped below {line}%")
 
             if scheduled and not reasons:
                 trigger = "check"
+                
                 for storage in sorted(place.low):
                     reasons.append(f"{storage} still below {line}%")
+                
                 if name != "shop" and place.allotment.bare():
                     reasons.append("beds empty")
+                
                 if name != "shop" and place.check_asked:
                     reasons.append("the check you asked for")
 
@@ -282,6 +308,7 @@ class Community:
             if reasons:
                 # - what the agent is shown when it wakes: the moment, and the place as it stands
                 weather = skies[name].intensity
+                
                 sees = {
                     "week": day_of_year // self.days,
                     "day": day,
@@ -303,18 +330,22 @@ class Community:
                 if name != "shop" and place.managers is not None:
                     self.consult(place, sees, reasons, day_of_year, day, events)
 
+    def exchanged(self, events, day, place, exchange):
+        # - one answer from an agent, recorded and told to whoever is watching
+        record = {"day": day, "place": place, "event": "exchange"}
+        record.update(exchange)
+        self.happened(events, record)
+
     def consult(self, building, sees, why, day_of_year, day, events):
         # - the allotment manager says what the beds need, the building manager
         #   decides, and the building carries it out
         # - an answer that cannot be read changes nothing: the last decision stays
         # - each answer is recorded, and told to whoever is watching, as soon as it is given
-        def said(exchange):
-            record = {"day": day, "place": building.name, "event": "exchange"}
-            record.update(exchange)
-            self.happened(events, record)
+        said = partial(self.exchanged, events, day, building.name)
 
         # - in the memory condition the building manager is also shown the community board
         board = None
+        
         if self.remember is not None:
             board = self.remember(self.history, events)
 
@@ -336,12 +367,16 @@ class Community:
         refused = []
 
         sent = []
+        
         for item in request["send_surplus"]:
             if item["kg"] == 0:
                 continue
+            
             kg = move(building.allotment.produce, self.shop.stock, item["crop"], item["kg"])
+            
             if kg > 0:
                 sent.append({"crop": item["crop"], "kg": kg})
+            
             if kg < item["kg"]:
                 refused.append(
                     f"send {item['kg']} kg {item['crop']} to the shop: only {kg} kg sent "
@@ -349,6 +384,7 @@ class Community:
                 )
 
         wants = request["water_wanted"] > 0 or bool(request["message"].strip())
+        
         for item in request["produce_wanted"]:
             if item["kg"] > 0:
                 wants = True
@@ -364,13 +400,12 @@ class Community:
             shop_sees = {"week": sees["week"], "day": sees["day"], "season": sees["season"]}
             shop_sees.update(self.shop.snapshot(today))
             shop_sees["buildings"] = {}
+            
             for other in self.buildings:
                 shop_sees["buildings"][other.name] = other.snapshot(today)
 
             reply, exchange = self.shop.manager.answer(shop_sees, building.name, request, sent)
-            record = {"day": day, "place": building.name, "event": "exchange"}
-            record.update(exchange)
-            self.happened(events, record)
+            self.exchanged(events, day, building.name, exchange)
             building.managers.shop_reply = reply
 
             if reply is None:
@@ -382,9 +417,12 @@ class Community:
                     water = round(taken["water"], 2)
 
                 for item in reply["produce_given"]:
+                    
                     if item["kg"] == 0:
                         continue
+                    
                     kg = move(self.shop.stock, building.food, item["crop"], item["kg"])
+                    
                     if kg > 0:
                         given.append({"crop": item["crop"], "kg": kg})
 
@@ -403,6 +441,8 @@ class Community:
 
     def __repr__(self):
         names = []
+        
         for building in self.buildings:
             names.append(building.name)
+        
         return f"Community(buildings=[{', '.join(names)}], shop={self.shop!r})"

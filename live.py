@@ -7,6 +7,9 @@ start and end of every day, every alarm, wake, answer, trade, rot and death --
 and the watcher keeps a copy and streams it to every browser that is looking.
 A browser that opens late is sent everything so far first, so it can catch up.
 Nothing here changes the run: it only listens.
+
+This file, and the visualisation it serves, were written with AI assistance
+(Claude, Anthropic), as stated in the report's AI statement.
 """
 import json
 import threading

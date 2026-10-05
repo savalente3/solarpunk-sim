@@ -6,12 +6,9 @@ and the whole run shown live in the browser.
 writes three files per run, each week as it finishes, so a run can be read
 while it is going:
 
-    data/version3/seed-0-no-memory.jsonl   for code: a _meta line, then one line per week
-    data/version3/seed-0-no-memory.csv     for graphs: one flat row per place per day
-    data/version3/seed-0-no-memory.txt     for reading: the whole run written out week by week
-
-Each version of the settlement's design keeps its runs in its own folder, so
-runs from different designs are never mixed up.
+    data/seed-0-no-memory.jsonl   for code: a _meta line, then one line per week
+    data/seed-0-no-memory.csv     for graphs: one flat row per place per day
+    data/seed-0-no-memory.txt     for reading: the whole run written out week by week
 
 While it runs, the settlement can be watched live: main.py serves the
 visualisation itself and prints the address to open.
@@ -24,9 +21,11 @@ import time
 from datetime import date
 from pathlib import Path
 
+from dotenv import load_dotenv
+
 from agents.building_managers import BuildingManagers
 from agents.llm_model import LLMModel, ModelUnavailable
-from agents.config.model_config import load_models
+from agents.config.model_config import model_configs
 from agents.prompts import allotment_manager, building_manager, shop_manager
 from agents.shop_manager import ShopManager
 from live import Watcher
@@ -36,13 +35,6 @@ from settlement.building import Building
 from settlement.community import Community
 from settlement.shop import Shop
 
-
-# - which version of the settlement's design these runs belong to: version1 opened
-#   with the whole roof planted; version2 opens on a bare roof, crops ripen at their
-#   own pace, one sky covers the settlement and the models swap buildings by seed;
-#   version3 spreads the same rain over most weeks, and rain on the beds counts
-#   towards what they need
-version = "version3"
 
 # - weeks in a year, for the progress line
 weeks = len(Community.seasons) * Community.season_weeks
@@ -124,6 +116,9 @@ if __name__ == "__main__":
     parser.add_argument("--resume", action="store_true", help="carry on a paused run from where it stopped")
     arguments = parser.parse_args()
 
+    # - LangSmith tracing, if switched on in .env
+    load_dotenv()
+
     rng = random.Random(arguments.seed)
 
     # - which model runs which place
@@ -134,11 +129,8 @@ if __name__ == "__main__":
         profiles["1"], profiles["2"] = profiles["2"], profiles["1"]
     configs = {}
 
-    models = load_models()
     for place, profile in profiles.items():
-        if profile not in models:
-            raise SystemExit(f"no API key for {profile} -- fill it in .env (see .env.example)")
-        configs[place] = models[profile]
+        configs[place] = model_configs[profile]
 
     # - each roof opens on two crops drawn from the six, fixed by the seed
     # - each building gets its two agents on its model
@@ -155,14 +147,13 @@ if __name__ == "__main__":
     if arguments.condition == "memory":
         community.remember = remembered
 
-    # - two files per run: data for code, and the printout for reading
-    # - model names only, never the configs, which carry the api keys
-    folder = Path(__file__).parent / "data" / version
+    # - three files per run: data for code, a table for graphs, and the printout for reading
+    # - model names only, not the whole configs
+    folder = Path(__file__).parent / "data"
     folder.mkdir(parents=True, exist_ok=True)
     name = f"seed-{arguments.seed}-{arguments.condition}"
 
     meta = {
-        "version": version,
         "seed": arguments.seed,
         "condition": arguments.condition,
         "date": date.today().isoformat(),
@@ -220,7 +211,7 @@ if __name__ == "__main__":
         sheet.writeheader()
 
         text.write(heading(meta) + "\n\n")
-        print(f"{version} · seed {arguments.seed} · {arguments.condition}")
+        print(f"seed {arguments.seed} · {arguments.condition}")
         print(f"watch it live: {watcher.address() or 'no free port, so no live view this time'}")
 
         try:
@@ -251,4 +242,4 @@ if __name__ == "__main__":
     # - a moment for the browsers to hear the end before the view closes with the run
     watcher.tell("end", {"weeks": weeks})
     time.sleep(3)
-    print(f"written to data/{version}/{name}.jsonl, .csv and .txt")
+    print(f"written to data/{name}.jsonl, .csv and .txt")

@@ -22,21 +22,26 @@ class Produce:
     def total(self):
         # - kg held, all crops
         total = 0
+        
         for lot in self.lots:
             total += lot["kg"]
+        
         return round(total, 2)
 
     def kinds(self):
         # - kg held of each crop
         kinds = {}
+        
         for lot in self.lots:
             kinds[lot["crop"]] = round(kinds.get(lot["crop"], 0) + lot["kg"], 2)
+        
         return kinds
 
     def free_storage(self):
         # - how many more kg can go in before the storage is full
         if self.capacity is None:
             return float("inf")
+        
         return max(0, round(self.capacity - self.total(), 2))
 
     def take(self, lots):
@@ -46,6 +51,7 @@ class Produce:
 
         for lot in lots:
             kg = round(min(lot["kg"], self.free_storage()), 2)
+            
             if kg <= 0:
                 break
 
@@ -63,6 +69,7 @@ class Produce:
         for lot in list(self.lots):
             if kg <= 0:
                 break
+            
             if lot["crop"] != crop:
                 continue
 
@@ -96,8 +103,10 @@ class Produce:
 
             if share > 0:
                 given = 0
+                
                 for lot in self.give(crop, share):
                     given += lot["kg"]
+                
                 eaten[crop] = round(given, 2)
                 so_far = round(so_far + given, 2)
 
@@ -106,12 +115,16 @@ class Produce:
     def summary(self, today):
         # - kg held of each crop, and how many days old its oldest lot is
         summary = {}
+
         for lot in self.lots:
             crop = lot["crop"]
+            
             if crop not in summary:
                 age = today - lot["picked"]
                 summary[crop] = {"kg": 0, "oldest_days": age, "rots_in": self.shelf_days - age}
+            
             summary[crop]["kg"] = round(summary[crop]["kg"] + lot["kg"], 2)
+        
         return summary
 
     def rot(self, today):
@@ -119,6 +132,7 @@ class Produce:
         rotted = []
 
         for lot in list(self.lots):
+            
             if today - lot["picked"] >= self.shelf_days:
                 rotted.append(lot)
                 self.lots.remove(lot)
@@ -133,6 +147,8 @@ def move(giver, receiver, crop, kg):
     receiver.take(lots)
 
     moved = 0
+    
     for lot in lots:
         moved += lot["kg"]
+    
     return round(moved, 2)

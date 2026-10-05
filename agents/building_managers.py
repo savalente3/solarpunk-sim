@@ -52,4 +52,5 @@ class BuildingManagers:
 
         if decision is not None:
             self.previous = decision
+            
         return decision

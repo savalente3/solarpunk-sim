@@ -30,6 +30,7 @@ class LLMModel:
         config = dict(model_config)
         self.structured = config.pop("structured", "function_calling")
         cap = config.pop("max_tokens", None)
+        
         if cap is not None:
             config["extra_body"] = {"max_tokens": cap}
 
@@ -49,6 +50,7 @@ class LLMModel:
         # - resuming a paused run: the answers it recorded are handed back in order
         #   instead of asking the models again, so the settlement comes out the same
         #   week for week until the recording runs out and the models take over
+        
         for exchange in exchanges:
             if exchange["agent"] == "shop":
                 key = ("shop", "shop")
@@ -70,11 +72,14 @@ class LLMModel:
         waiting = self.recorded.get((place, who))
         if waiting:
             before = waiting.pop(0)
+            
             if before["shown"] == message:
                 exchange = {}
+                
                 for key in ("agent", "shown", "answer", "unreadable", "tokens_in", "tokens_out", "seconds"):
                     exchange[key] = before.get(key)
                 return before["answer"], exchange
+            
             self.recorded.clear()
             print(f"resume: the {who} of {place} is shown something new, so the models take over from here")
 
@@ -105,12 +110,16 @@ class LLMModel:
             if "error parsing" not in str(error):
                 raise ModelUnavailable(f"the {who} of {place} could not be reached: {error}")
             unreadable = str(error)[:500]
+        
         except openai.APIError as error:
             raise ModelUnavailable(f"the {who} of {place} could not be reached: {error}")
+        
         except (ValueError, openai.OpenAIError) as error:
             unreadable = str(error)[:500]
+        
         else:
             usage = reply["raw"].usage_metadata or {}
+            
             if reply["parsed"] is not None:
                 answer = reply["parsed"].model_dump()
             elif reply["parsing_error"] is not None:
@@ -127,4 +136,5 @@ class LLMModel:
             "tokens_out": usage.get("output_tokens"),
             "seconds": round(time.monotonic() - started, 1),
         }
+        
         return answer, exchange

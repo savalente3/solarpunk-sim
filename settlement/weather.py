@@ -32,6 +32,7 @@ class Weather:
 
         low, high = odds["sun"]
         wettest = 2 * odds["rain"] / odds["wet_weeks"]
+        
         self.intensity = {
             "sun": round(rng.uniform(low, high), 2),
             "rain": round(rng.uniform(0.0, wettest), 2),

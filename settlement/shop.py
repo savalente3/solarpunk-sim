@@ -26,8 +26,10 @@ class Shop(Infrastructure):
         #   small enough to be eaten before it rots, and ageing from the day the run starts
         self.stock = Produce(self.capacity)
         opening = []
+
         for crop in crops:
             opening.append({"crop": crop, "kg": self.opening_kg, "picked": 0})
+        
         self.stock.take(opening)
 
         # - the shop's agent, handed in; none means it is not run by an agent
@@ -36,6 +38,7 @@ class Shop(Infrastructure):
     def snapshot(self, today):
         # - what the shop looks like right now: what its agent is shown
         levels = {}
+        
         for storage, level in self.levels().items():
             levels[storage] = round(level * 100, 1)
 

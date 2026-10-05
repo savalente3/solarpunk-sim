@@ -1,0 +1,37 @@
+seed,condition,place,model,label,weeks_recorded,finished,survived,survived_weeks,death_cause,water_short_days,food_short_days,short_days,water_met,food_met,energy_met,rationed_days,harvested_kg,rotted_kg,lost_kg,wasted_kg,wasted_share,kinds_eaten,sent_kg,water_got,produce_got_kg,water_given,produce_given_kg,calls,unreadable
+0,memory,1,gpt-oss:20b,gpt-oss,48,True,False,17.43,no food,0,34,34,100.0,72.4,100.0,0,210,88.3,323.7,412.0,196.2,2.0,147.3,18456,84.2,,,176,0
+0,memory,2,gemma4:26b,gemma,48,True,True,48,,0,50,50,100.0,85.6,77.6,138,1290,1016.9,112.4,1129.3,87.5,1.81,106.0,71133,69.6,,,670,0
+0,memory,shop,nemotron-3.5-lightning,shop,48,True,,,,,,,,,,,,129.4,,,,,,,,89589,153.8,402,3
+0,no-memory,1,gpt-oss:20b,gpt-oss,48,True,False,6.14,no food,0,20,20,100.0,53.0,100.0,0,0,16.3,74.1,90.4,,2.86,0,2515,20.0,,,56,2
+0,no-memory,2,gemma4:26b,gemma,48,True,True,48,,0,31,31,99.7,89.9,75.1,137,1230,553.3,135.5,688.8,56.0,2.21,522.8,65188,95.3,,,650,0
+0,no-memory,shop,nemotron-3.5-lightning,shop,48,True,,,,,,,,,,,,437.5,,,,,,,,67703,115.3,305,0
+1,memory,1,gemma4:26b,gemma,48,True,True,48,,0,47,47,100.0,85.7,81.6,136,1340,887.1,49.1,936.2,69.9,2.0,154.5,40497,61.7,,,640,0
+1,memory,2,gpt-oss:20b,gpt-oss,48,True,False,17.86,no food,0,36,36,100.0,69.1,97.4,6,240,113.4,201.2,314.5,131.1,2.22,174.0,12529,109.7,,,204,0
+1,memory,shop,nemotron-3.5-lightning,shop,48,True,,,,,,,,,,,,187.0,,,,,,,,53026,171.4,387,4
+1,no-memory,1,gemma4:26b,gemma,48,True,True,48,,0,11,11,100.0,96.7,81.2,110,1360,572.0,78.0,649.9,47.8,2.69,531.7,57045,132.2,,,614,0
+1,no-memory,2,gpt-oss:20b,gpt-oss,48,True,False,30.14,no food,0,50,50,100.0,74.0,70.0,114,610,188.9,171.3,360.2,59.0,1.87,400.2,12667,101.2,,,302,4
+1,no-memory,shop,nemotron-3.5-lightning,shop,48,True,,,,,,,,,,,,728.5,,,,,,,,69712,233.4,380,0
+2,memory,1,gpt-oss:20b,gpt-oss,48,True,False,10.29,no food,0,23,23,100.0,65.7,77.8,31,90,87.6,139.0,226.5,251.7,2.36,30.0,10014,53.4,,,132,0
+2,memory,2,gemma4:26b,gemma,48,True,False,42.43,no food,0,83,83,100.0,72.5,86.3,96,1130,895.0,239.0,1134.0,100.4,1.58,89.8,47337,24.9,,,576,0
+2,memory,shop,nemotron-3.5-lightning,shop,48,True,,,,,,,,,,,,71.5,,,,,,,,57351,78.2,325,2
+2,no-memory,1,gpt-oss:20b,gpt-oss,48,True,False,6.14,no food,0,20,20,100.0,50.0,100.0,0,0,2.8,15.2,18.1,,2.14,0,20,6.0,,,42,13
+2,no-memory,2,gemma4:26b,gemma,48,True,True,48,,0,14,14,100.0,96.1,81.2,113,1410,573.1,152.1,725.2,51.4,2.73,553.8,52090,79.4,,,656,0
+2,no-memory,shop,nemotron-3.5-lightning,shop,48,True,,,,,,,,,,,,498.3,,,,,,,,52110,85.4,302,1
+3,memory,1,gemma4:26b,gemma,48,True,True,48,,0,34,34,100.0,90.2,85.1,139,1340,930.7,22.8,953.5,71.2,2.23,115.0,66017,84.4,,,638,0
+3,memory,2,gpt-oss:20b,gpt-oss,48,True,False,27.14,no food,0,42,42,100.0,78.2,100.0,0,400,247.9,254.1,502.0,125.5,1.86,145.5,21459,106.2,,,276,0
+3,memory,shop,nemotron-3.5-lightning,shop,48,True,,,,,,,,,,,,99.9,,,,,,,,87476,190.6,425,2
+3,no-memory,1,gemma4:26b,gemma,48,True,True,48,,0,15,15,100.0,95.6,84.0,112,1310,506.6,169.8,676.4,51.6,2.1,489.4,45844,51.1,,,600,0
+3,no-memory,2,gpt-oss:20b,gpt-oss,48,True,False,18.57,no food,0,36,36,100.0,69.5,100.0,0,70,110.2,179.7,290.0,414.2,2.11,25.9,3256,131.1,,,136,20
+3,no-memory,shop,nemotron-3.5-lightning,shop,48,True,,,,,,,,,,,,363.1,,,,,,,,49100,182.2,280,1
+4,memory,1,gpt-oss:20b,gpt-oss,48,True,True,48,,0,53,53,99.3,83.8,77.7,124,1150,370.9,340.2,711.1,61.8,2.06,686.2,37183,151.1,,,542,1
+4,memory,2,gemma4:26b,gemma,48,True,True,48,,0,20,20,97.9,93.3,83.1,156,1040,921.2,310.8,1232.0,118.5,2.85,20.0,57025,209.0,,,638,0
+4,memory,shop,nemotron-3.5-lightning,shop,48,True,,,,,,,,,,,,304.5,,,,,,,,94208,360.2,548,5
+4,no-memory,1,gpt-oss:20b,gpt-oss,48,True,False,6.14,no food,0,20,20,100.0,49.3,100.0,0,30,7.9,70.6,78.5,261.8,1.14,0,207,10.0,,,42,9
+4,no-memory,2,gemma4:26b,gemma,48,True,True,48,,0,2,2,99.9,99.3,83.1,100,1670,643.4,0,643.4,38.5,2.75,732.0,56495,100.3,,,656,0
+4,no-memory,shop,nemotron-3.5-lightning,shop,48,True,,,,,,,,,,,,631.7,,,,,,,,56702,110.3,302,2
+5,memory,1,gemma4:26b,gemma,48,True,True,48,,0,57,57,100.0,83.5,81.6,142,1390,949.0,123.5,1072.4,77.2,2.04,225.1,44938,74.2,,,644,0
+5,memory,2,gpt-oss:20b,gpt-oss,48,True,False,6.14,no food,0,20,20,100.0,47.0,100.0,0,0,15.3,70.5,85.8,,2.0,0,4082,15.0,,,72,0
+5,memory,shop,nemotron-3.5-lightning,shop,48,True,,,,,,,,,,,,165.9,,,,,,,,49020,89.2,335,3
+5,no-memory,1,gemma4:26b,gemma,48,True,True,48,,0,15,15,99.9,95.7,82.1,123,1730,687.0,90.5,777.6,44.9,2.9,803.7,50822,107.0,,,642,1
+5,no-memory,2,gpt-oss:20b,gpt-oss,48,True,False,25.57,no food,0,40,40,100.0,75.5,100.0,7,530,303.5,104.8,408.2,77.0,2.65,160.8,18977,142.6,,,232,15
+5,no-memory,shop,nemotron-3.5-lightning,shop,48,True,,,,,,,,,,,,745.0,,,,,,,,69799,249.5,329,0

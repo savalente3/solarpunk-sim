@@ -8,8 +8,10 @@ from settlement.community import Community
 
 def pairs(values):
     parts = []
+    
     for key, value in values.items():
         parts.append(f"{key} {value}")
+    
     return ", ".join(parts)
 
 
@@ -27,6 +29,7 @@ def held(summary):
     
     for crop, lot in summary.items():
         parts.append(f"{crop} {lot['kg']} kg ({lot['oldest_days']} days old → rots in {lot['rots_in']} days)")
+    
     return ", ".join(parts)
 
 
@@ -46,6 +49,7 @@ def total(lots):
     
     for lot in lots:
         kg += lot["kg"]
+    
     return kg
 
 
@@ -148,6 +152,7 @@ def seen(sees):
 
     if "shop" in sees:
         lines.append(f"shop has          water {sees['shop']['water']} L | " + held(sees["shop"]["stock"]))
+    
     return lines
 
 
@@ -174,6 +179,7 @@ def shop_view(sees):
             f"building {name}        tenants {shortage(building['tenants'])} | tank {building['levels']['tank']}%"
             f" ({building['water']} L) | food storage {round(food, 2)} kg | grows {growing}"
         )
+    
     return lines
 
 
@@ -182,6 +188,7 @@ def requested(request):
     parts = []
 
     sending = []
+    
     for item in request["send_surplus"]:
         if item["kg"]:
             sending.append(f"{item['kg']} kg {item['crop']}")
@@ -193,6 +200,7 @@ def requested(request):
         parts.append(f"ask for {request['water_wanted']} L water")
 
     wanting = []
+
     for item in request["produce_wanted"]:
         if item["kg"]:
             wanting.append(f"{item['kg']} kg {item['crop']}")
@@ -207,16 +215,19 @@ def requested(request):
     
     if request["message"].strip():
         lines.append(f'to the shop, says: "{request["message"]}"')
+    
     return lines
 
 
 def replied(reply):
     # - what the shop gave, and what it said
     given = []
+
     if reply["water_given"]:
         given.append(f"{reply['water_given']} L water")
     
     for item in reply["produce_given"]:
+
         if item["kg"]:
             given.append(f"{item['kg']} kg {item['crop']}")
 
@@ -232,20 +243,24 @@ def replied(reply):
     
     lines.append(f'says: "{reply["message"]}"')
     lines.append(f'why: "{reply["reasoning"]}"')
+    
     return lines
 
 
 def asked(answer):
     # - what the allotment manager said, in a few lines
     lines = ["beds need a day: " + per_day(answer["beds_need"])]
+    
     if answer["plant"]:
         lines.append("plant: " + plantings(answer["plant"]))
+    
     lines.append(f'says: "{answer["message"]}"')
+    
     return lines
 
 
 def decided(decision):
-    # - what the building manager decided, in a few lines
+    # - what the buildig manager decided, in a few lines
     tenants = decision["until_next_time"]["tenants"]
     lines = [
         f"tenants may use {percent(tenants['energy'])} energy, {percent(tenants['water'])} water, {percent(tenants['food'])} food",
@@ -255,8 +270,10 @@ def decided(decision):
     now = []
     for request in decision["now"]["move_to_food_storage"]:
         now.append(f"move {request['kg']} kg {request['crop']} into food storage")
+    
     if decision["now"]["plant"]:
         now.append("plant " + plantings(decision["now"]["plant"]))
+    
     if now:
         lines.append("now: " + "; ".join(now))
 
@@ -265,6 +282,7 @@ def decided(decision):
 
     lines.append(f"check again in {decision['check_again_in_days']} days")
     lines.append(f'why: "{decision["reasoning"]}"')
+    
     return lines
 
 
@@ -284,15 +302,19 @@ def happened(event):
     if kind == "exchange":
         if event["answer"] is None:
             return [f"UNREADABLE the {event['agent']}'s answer could not be read: {event['unreadable']}"]
+        
         if event["agent"] == "allotment manager":
             label, said = "ALLOTMENT", asked(event["answer"])
         elif event["agent"] == "shop":
             label, said = "SHOP", replied(event["answer"])
         else:
             label, said = "MANAGER", decided(event["answer"])
+        
         lines = [label.ljust(10) + said[0]]
+        
         for line in said[1:]:
             lines.append(" " * 10 + line)
+        
         return lines
 
     if kind == "decision":
@@ -303,12 +325,16 @@ def happened(event):
 
     if kind == "trade":
         parts = []
+
         if event["sent"]:
             parts.append("sent the shop " + listed(event["sent"]))
+        
         if event["water"]:
             parts.append(f"received {event['water']} L water")
+        
         if event["produce"]:
             parts.append("received " + listed(event["produce"]))
+        
         return ["TRADE     " + ("; ".join(parts) or "nothing changed hands")]
 
     if kind == "tenants died":
@@ -329,6 +355,7 @@ def heading(meta):
 
     models = []
     crops = []
+
     for place in ("1", "2", "shop"):
         name = place if place == "shop" else f"building {place}"
         models.append(f"{name} {meta['models'][place] or 'no agent'}")
@@ -336,6 +363,7 @@ def heading(meta):
 
     lines.append("models: " + " | ".join(models))
     lines.append("crops:  " + " | ".join(crops))
+
     return "\n".join(lines)
 
 
@@ -350,20 +378,25 @@ def describe(record):
 
     for day, places in days.items():
         lines.append(f"  day {day}")
+
         for place, happenings in places.items():
             lines.append(f"    {place}")
+
             for event in happenings:
                 for line in happened(event):
                     lines.append(f"      {line}")
+
                 if "sees" in event:
                     shown = seen(event["sees"])
                     lines.append(" " * 16 + "sees  " + shown[0])
+
                     for line in shown[1:]:
                         lines.append(" " * 22 + line)
 
     lines.append("  end of week")
 
     for name, tanks in record["buildings"].items():
+
         if not tanks["alive"]:
             lines.append("    " + f"Building {name}:".ljust(13) + "empty, tenants gone")
             continue
@@ -395,33 +428,44 @@ def noted(event):
     if kind == "exchange":
         if event["agent"] == "allotment manager":
             return None
+        
         if event["answer"] is None:
             return f"{place}: the {event['agent']}'s answer could not be read"
+        
         if event["agent"] == "shop":
             who, said = f"the shop, to {place}", replied(event["answer"])
         else:
             who, said = f"{place}'s building manager", decided(event["answer"])
+        
         kept = []
+        
         for line in said:
             if not line.startswith(("why:", "check again", "says:", "to the shop, says:")):
                 kept.append(line)
+        
         return f"{who}: " + "; ".join(kept)
 
     if kind == "trade":
         parts = []
+        
         if event["sent"]:
             parts.append("sent the shop " + listed(event["sent"]))
+        
         if event["water"]:
             parts.append(f"received {event['water']} L water")
+        
         if event["produce"]:
             parts.append("received " + listed(event["produce"]))
+        
         if not parts:
             return None
+        
         return f"{place} and the shop: " + "; ".join(parts)
 
     if kind == "decision":
         if not event["refused"]:
             return None
+        
         return f"{place} could not: " + "; ".join(event["refused"])
 
     if kind == "rotted":
@@ -445,10 +489,12 @@ def summed(record):
     for name, building in record["buildings"].items():
         said = []
         died = False
+        
         for event in record["events"]:
             if event["event"] == "tenants died" and event["place"] == name:
                 said.append(f"the tenants died ({event['cause']})")
                 died = True
+        
         if not building["alive"] and not died:
             parts.append(f"building {name}: empty")
             continue
@@ -456,36 +502,48 @@ def summed(record):
         harvested = round(total(record["harvested"][name]), 1)
         rotted = round(total(record["rotted"][name]), 1)
         lost = round(total(record["died"][name]), 1)
+        
         if harvested:
             said.append(f"harvested {harvested} kg")
+        
         if rotted:
             said.append(f"{rotted} kg rotted")
+        
         if lost:
             said.append(f"{lost} kg lost to drought")
 
         thirsty = 0
         hungry = 0
+        
         for day in record["days"]:
             tenants = day[name]["tenants"]
+            
             if day[name]["alive"] and tenants["days_without_water"] > 0:
                 thirsty += 1
+            
             if day[name]["alive"] and tenants["days_without_food"] > 0:
                 hungry += 1
+        
         if thirsty:
             said.append(f"tenants without water {thirsty} days")
+        
         if hungry:
             said.append(f"tenants without food {hungry} days")
 
         sent = 0
         water = 0
         produce = 0
+        
         for event in record["events"]:
+            
             if event["event"] == "trade" and event["place"] == name:
                 sent += total(event["sent"])
                 water += event["water"]
                 produce += total(event["produce"])
+        
         if sent:
             said.append(f"sent the shop {round(sent, 1)} kg")
+        
         if water or produce:
             said.append(f"got {round(water)} L water and {round(produce, 1)} kg produce from the shop")
 
@@ -494,8 +552,10 @@ def summed(record):
     stock = round(sum(record["shop"]["stock"].values()), 1)
     shop_rotted = round(total(record["rotted"]["shop"]), 1)
     shop = f"the shop: {round(record['shop']['water'])} L water, {stock} kg in stock"
+    
     if shop_rotted:
         shop += f", {shop_rotted} kg rotted"
+    
     parts.append(shop)
     return " · ".join(parts)
 
@@ -508,26 +568,35 @@ def remembered(history, events):
 
     earlier = history[:-2]
     recent = history[-2:]
+    
     if earlier:
         lines.append("Earlier weeks, one line each:")
+        
         for record in earlier:
             lines.append("  " + summed(record))
 
     for record in recent:
         lines.append(f"Week {record['week'] + 1} ({record['season']}), day by day:")
+        
         for event in record["events"]:
             text = noted(event)
+            
             if text:
                 lines.append(f"  day {event['day'] + 1} · {text}")
+        
         lines.append("  in all: " + summed(record))
 
     lines.append("This week so far:")
     written = 0
+    
     for event in events:
         text = noted(event)
+        
         if text:
             lines.append(f"  day {event['day'] + 1} · {text}")
             written += 1
+    
     if not written:
         lines.append("  nothing yet")
+    
     return lines
